@@ -2,19 +2,22 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	"github.com/Sifchain/sifnode/x/clp/types"
 )
 
+const MaxPageLimit = 200
+
 // Querier is used as Keeper will have duplicate methods if used directly, and gRPC names take precedence over keeper
 type Querier struct {
-	Keeper
+	Keeper Keeper
 }
 
 var _ types.QueryServer = Querier{}
@@ -23,14 +26,11 @@ func (k Querier) GetPool(c context.Context, req *types.PoolReq) (*types.PoolRes,
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
-
 	ctx := sdk.UnwrapSDKContext(c)
-
 	pool, err := k.Keeper.GetPool(ctx, req.Symbol)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "validator %s not found", req.Symbol)
 	}
-
 	return &types.PoolRes{
 		Pool:             &pool,
 		Height:           ctx.BlockHeight(),
@@ -43,14 +43,27 @@ func (k Querier) GetPools(c context.Context, req *types.PoolsReq) (*types.PoolsR
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
+	if req.Pagination == nil {
+		req.Pagination = &query.PageRequest{
+			Limit: MaxPageLimit,
+		}
+	}
+
+	if req.Pagination.Limit > MaxPageLimit {
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("page size greater than max %d", MaxPageLimit))
+	}
+
 	ctx := sdk.UnwrapSDKContext(c)
 
-	pools := k.Keeper.GetPools(ctx)
-
+	pools, pageRes, err := k.Keeper.GetPoolsPaginated(ctx, req.Pagination)
+	if err != nil {
+		return nil, err
+	}
 	return &types.PoolsRes{
 		Pools:            pools,
 		Height:           ctx.BlockHeight(),
 		ClpModuleAddress: types.GetCLPModuleAddress().String(),
+		Pagination:       pageRes,
 	}, nil
 }
 
@@ -58,9 +71,7 @@ func (k Querier) GetLiquidityProvider(c context.Context, req *types.LiquidityPro
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
-
 	ctx := sdk.UnwrapSDKContext(c)
-
 	lp, err := k.Keeper.GetLiquidityProvider(ctx, req.Symbol, req.LpAddress)
 	if err != nil {
 		return nil, err
@@ -71,8 +82,56 @@ func (k Querier) GetLiquidityProvider(c context.Context, req *types.LiquidityPro
 	}
 	native, external, _, _ := CalculateAllAssetsForLP(pool, lp)
 	lpResponse := types.NewLiquidityProviderResponse(lp, ctx.BlockHeight(), native.String(), external.String())
-
 	return &lpResponse, nil
+}
+
+func (k Querier) GetLiquidityProviderData(c context.Context, req *types.LiquidityProviderDataReq) (*types.LiquidityProviderDataRes, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.Pagination == nil {
+		req.Pagination = &query.PageRequest{
+			Limit: MaxPageLimit,
+		}
+	}
+
+	if req.Pagination.Limit > MaxPageLimit {
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("page size greater than max %d", MaxPageLimit))
+	}
+
+	ctx := sdk.UnwrapSDKContext(c)
+	addr, err := sdk.AccAddressFromBech32(req.LpAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if req.Pagination.Limit > MaxPageLimit {
+		req.Pagination.Limit = MaxPageLimit
+	}
+	assetList, _, err := k.Keeper.GetAssetsForLiquidityProviderPaginated(ctx, addr, &query.PageRequest{Limit: req.Pagination.Limit})
+	if err != nil {
+		return nil, err
+	}
+
+	lpDataList := make([]*types.LiquidityProviderData, 0, len(assetList))
+	for i := range assetList {
+		asset := assetList[i]
+		pool, err := k.Keeper.GetPool(ctx, asset.Symbol)
+		if err != nil {
+			continue
+		}
+		lp, err := k.Keeper.GetLiquidityProvider(ctx, asset.Symbol, req.LpAddress)
+		if err != nil {
+			continue
+		}
+		native, external, _, _ := CalculateAllAssetsForLP(pool, lp)
+		lpData := types.NewLiquidityProviderData(lp, native.String(), external.String())
+		lpDataList = append(lpDataList, &lpData)
+	}
+
+	lpDataResponse := types.NewLiquidityProviderDataResponse(lpDataList, ctx.BlockHeight())
+	return &lpDataResponse, nil
 }
 
 func (k Querier) GetAssetList(c context.Context, req *types.AssetListReq) (*types.AssetListRes, error) {
@@ -80,24 +139,27 @@ func (k Querier) GetAssetList(c context.Context, req *types.AssetListReq) (*type
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	ctx := sdk.UnwrapSDKContext(c)
+	if req.Pagination == nil {
+		req.Pagination = &query.PageRequest{
+			Limit: MaxPageLimit,
+		}
+	}
 
+	if req.Pagination.Limit > MaxPageLimit {
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("page size greater than max %d", MaxPageLimit))
+	}
+
+	ctx := sdk.UnwrapSDKContext(c)
 	addr, err := sdk.AccAddressFromBech32(req.LpAddress)
 	if err != nil {
 		return nil, err
 	}
-
-	assetList := k.GetAssetsForLiquidityProvider(ctx, addr)
-
-	al := make([]*types.Asset, len(assetList))
-
-	for i := range assetList {
-		asset := assetList[i]
-		al = append(al, &asset)
+	assetList, _, err := k.Keeper.GetAssetsForLiquidityProviderPaginated(ctx, addr, &query.PageRequest{Limit: MaxPageLimit})
+	if err != nil {
+		return nil, err
 	}
-
 	return &types.AssetListRes{
-		Assets: al,
+		Assets: assetList,
 	}, nil
 }
 
@@ -106,20 +168,28 @@ func (k Querier) GetLiquidityProviderList(c context.Context, req *types.Liquidit
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
+	if req.Pagination == nil {
+		req.Pagination = &query.PageRequest{
+			Limit: MaxPageLimit,
+		}
+	}
+
+	if req.Pagination.Limit > MaxPageLimit {
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("page size greater than max %d", MaxPageLimit))
+	}
+
 	ctx := sdk.UnwrapSDKContext(c)
-
 	searchingAsset := types.NewAsset(req.Symbol)
-	lpList := k.GetLiquidityProvidersForAsset(ctx, searchingAsset)
 
-	lpl := make([]*types.LiquidityProvider, len(lpList))
-	for i, lp := range lpList {
-		lp := lp
-		lpl[i] = &lp
+	lpList, pageRes, err := k.Keeper.GetLiquidityProvidersForAssetPaginated(ctx, searchingAsset, req.Pagination)
+	if err != nil {
+		return nil, err
 	}
 
 	return &types.LiquidityProviderListRes{
-		LiquidityProviders: lpl,
+		LiquidityProviders: lpList,
 		Height:             ctx.BlockHeight(),
+		Pagination:         pageRes,
 	}, nil
 }
 
@@ -128,31 +198,24 @@ func (k Querier) GetLiquidityProviders(c context.Context, req *types.LiquidityPr
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	var lpl []*types.LiquidityProvider
-	ctx := sdk.UnwrapSDKContext(c)
-	store := ctx.KVStore(k.storeKey)
-	valStore := prefix.NewStore(store, types.LiquidityProviderPrefix)
-
-	pageRes, err := query.FilteredPaginate(valStore, req.Pagination, func(key []byte, value []byte, accumulate bool) (bool, error) {
-		var lp types.LiquidityProvider
-		err := k.cdc.UnmarshalBinaryBare(value, &lp)
-		if err != nil {
-			return false, err
+	if req.Pagination == nil {
+		req.Pagination = &query.PageRequest{
+			Limit: MaxPageLimit,
 		}
-
-		if accumulate {
-			lpl = append(lpl, &lp)
-		}
-
-		return true, nil
-	})
-
-	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	if req.Pagination.Limit > MaxPageLimit {
+		return nil, status.Error(codes.InvalidArgument, fmt.Sprintf("page size greater than max %d", MaxPageLimit))
+	}
+
+	ctx := sdk.UnwrapSDKContext(c)
+
+	lpList, pageRes, err := k.Keeper.GetAllLiquidityProvidersPaginated(ctx, req.Pagination)
+	if err != nil {
+		return nil, err
+	}
 	return &types.LiquidityProvidersRes{
-		LiquidityProviders: lpl,
+		LiquidityProviders: lpList,
 		Height:             ctx.BlockHeight(),
 		Pagination:         pageRes,
 	}, nil

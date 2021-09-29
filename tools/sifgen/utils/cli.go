@@ -2,8 +2,8 @@ package utils
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"io"
 	"io/ioutil"
 	"log"
@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/Sifchain/sifnode/app"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 )
 
 const (
@@ -57,6 +58,8 @@ type CLI struct {
 }
 
 func NewCLI(chainID, keyringBackend string) CLI {
+	app.SetConfig(false)
+
 	return CLI{
 		chainID:        chainID,
 		configPath:     fmt.Sprintf("%s/config", app.DefaultNodeHome),
@@ -114,27 +117,12 @@ func (c CLI) InitChain(chainID, moniker, nodeDir string) (*string, error) {
 func (c CLI) AddKey(name, mnemonic, keyPassword, cliDir string) (*string, error) {
 	switch c.keyringBackend {
 	case keyring.BackendFile:
-		return c.AddKeyToFileBackend(name, mnemonic, keyPassword, cliDir)
+		return nil, errors.New("not implemented")
 	default:
 		var input [][]byte
 		input = c.formatInputs([]string{mnemonic, ""})
 		return c.shellExecInput("sifnoded", input, "keys", "add", name, "--home", cliDir, "-i", "--keyring-backend", c.keyringBackend)
 	}
-}
-
-// AddKeyToFileBackend
-//
-// Adding a key to the file backend is different enough from the other backends that it's
-// worth splitting it out.  This is usually only called by AddKey.  (It needs a few things
-// from an interactive session - the mnemonic and the password repeated twice)
-func (c CLI) AddKeyToFileBackend(name, mnemonic, keyPassword, cliDir string) (*string, error) {
-	return c.shellExecInput("sifnoded",
-		[][]byte{
-			[]byte(mnemonic + "\n"),
-			[]byte("\n"),
-			[]byte(keyPassword + "\n"),
-			[]byte(keyPassword + "\n"),
-		}, "keys", "add", name, "--home", cliDir, "-i", "--keyring-backend", "file")
 }
 
 func (c CLI) AddGenesisAccount(address, nodeDir string, coins []string) (*string, error) {

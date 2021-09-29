@@ -346,7 +346,8 @@ func (m *LiquidityProviderRes) GetHeight() int64 {
 }
 
 type AssetListReq struct {
-	LpAddress string `protobuf:"bytes,1,opt,name=lp_address,json=lpAddress,proto3" json:"lp_address,omitempty"`
+	LpAddress  string             `protobuf:"bytes,1,opt,name=lp_address,json=lpAddress,proto3" json:"lp_address,omitempty"`
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *AssetListReq) Reset()         { *m = AssetListReq{} }
@@ -383,8 +384,9 @@ func (m *AssetListReq) XXX_DiscardUnknown() {
 var xxx_messageInfo_AssetListReq proto.InternalMessageInfo
 
 type AssetListRes struct {
-	Assets []*Asset `protobuf:"bytes,1,rep,name=assets,proto3" json:"assets,omitempty"`
-	Height int64    `protobuf:"varint,2,opt,name=height,proto3" json:"height,omitempty"`
+	Assets     []*Asset            `protobuf:"bytes,1,rep,name=assets,proto3" json:"assets,omitempty"`
+	Height     int64               `protobuf:"varint,2,opt,name=height,proto3" json:"height,omitempty"`
+	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *AssetListRes) Reset()         { *m = AssetListRes{} }
@@ -434,15 +436,122 @@ func (m *AssetListRes) GetHeight() int64 {
 	return 0
 }
 
+func (m *AssetListRes) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+type LiquidityProviderDataReq struct {
+	LpAddress  string             `protobuf:"bytes,1,opt,name=lp_address,json=lpAddress,proto3" json:"lp_address,omitempty"`
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *LiquidityProviderDataReq) Reset()         { *m = LiquidityProviderDataReq{} }
+func (m *LiquidityProviderDataReq) String() string { return proto.CompactTextString(m) }
+func (*LiquidityProviderDataReq) ProtoMessage()    {}
+func (*LiquidityProviderDataReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5f4edede314ca3fd, []int{8}
+}
+func (m *LiquidityProviderDataReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LiquidityProviderDataReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_LiquidityProviderDataReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *LiquidityProviderDataReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LiquidityProviderDataReq.Merge(m, src)
+}
+func (m *LiquidityProviderDataReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *LiquidityProviderDataReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_LiquidityProviderDataReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LiquidityProviderDataReq proto.InternalMessageInfo
+
+type LiquidityProviderDataRes struct {
+	LiquidityProviderData []*LiquidityProviderData `protobuf:"bytes,1,rep,name=liquidity_provider_data,json=liquidityProviderData,proto3" json:"liquidity_provider_data,omitempty"`
+	Height                int64                    `protobuf:"varint,2,opt,name=height,proto3" json:"height,omitempty"`
+	Pagination            *query.PageRequest       `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *LiquidityProviderDataRes) Reset()         { *m = LiquidityProviderDataRes{} }
+func (m *LiquidityProviderDataRes) String() string { return proto.CompactTextString(m) }
+func (*LiquidityProviderDataRes) ProtoMessage()    {}
+func (*LiquidityProviderDataRes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5f4edede314ca3fd, []int{9}
+}
+func (m *LiquidityProviderDataRes) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LiquidityProviderDataRes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_LiquidityProviderDataRes.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *LiquidityProviderDataRes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LiquidityProviderDataRes.Merge(m, src)
+}
+func (m *LiquidityProviderDataRes) XXX_Size() int {
+	return m.Size()
+}
+func (m *LiquidityProviderDataRes) XXX_DiscardUnknown() {
+	xxx_messageInfo_LiquidityProviderDataRes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LiquidityProviderDataRes proto.InternalMessageInfo
+
+func (m *LiquidityProviderDataRes) GetLiquidityProviderData() []*LiquidityProviderData {
+	if m != nil {
+		return m.LiquidityProviderData
+	}
+	return nil
+}
+
+func (m *LiquidityProviderDataRes) GetHeight() int64 {
+	if m != nil {
+		return m.Height
+	}
+	return 0
+}
+
+func (m *LiquidityProviderDataRes) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 type LiquidityProviderListReq struct {
 	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	// pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *LiquidityProviderListReq) Reset()         { *m = LiquidityProviderListReq{} }
 func (m *LiquidityProviderListReq) String() string { return proto.CompactTextString(m) }
 func (*LiquidityProviderListReq) ProtoMessage()    {}
 func (*LiquidityProviderListReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5f4edede314ca3fd, []int{8}
+	return fileDescriptor_5f4edede314ca3fd, []int{10}
 }
 func (m *LiquidityProviderListReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -474,13 +583,15 @@ var xxx_messageInfo_LiquidityProviderListReq proto.InternalMessageInfo
 type LiquidityProviderListRes struct {
 	LiquidityProviders []*LiquidityProvider `protobuf:"bytes,1,rep,name=liquidity_providers,json=liquidityProviders,proto3" json:"liquidity_providers,omitempty"`
 	Height             int64                `protobuf:"varint,2,opt,name=height,proto3" json:"height,omitempty"`
+	// pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *LiquidityProviderListRes) Reset()         { *m = LiquidityProviderListRes{} }
 func (m *LiquidityProviderListRes) String() string { return proto.CompactTextString(m) }
 func (*LiquidityProviderListRes) ProtoMessage()    {}
 func (*LiquidityProviderListRes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5f4edede314ca3fd, []int{9}
+	return fileDescriptor_5f4edede314ca3fd, []int{11}
 }
 func (m *LiquidityProviderListRes) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -523,6 +634,13 @@ func (m *LiquidityProviderListRes) GetHeight() int64 {
 	return 0
 }
 
+func (m *LiquidityProviderListRes) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 type LiquidityProvidersReq struct {
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
@@ -531,7 +649,7 @@ func (m *LiquidityProvidersReq) Reset()         { *m = LiquidityProvidersReq{} }
 func (m *LiquidityProvidersReq) String() string { return proto.CompactTextString(m) }
 func (*LiquidityProvidersReq) ProtoMessage()    {}
 func (*LiquidityProvidersReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5f4edede314ca3fd, []int{10}
+	return fileDescriptor_5f4edede314ca3fd, []int{12}
 }
 func (m *LiquidityProvidersReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -570,7 +688,7 @@ func (m *LiquidityProvidersRes) Reset()         { *m = LiquidityProvidersRes{} }
 func (m *LiquidityProvidersRes) String() string { return proto.CompactTextString(m) }
 func (*LiquidityProvidersRes) ProtoMessage()    {}
 func (*LiquidityProvidersRes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5f4edede314ca3fd, []int{11}
+	return fileDescriptor_5f4edede314ca3fd, []int{13}
 }
 func (m *LiquidityProvidersRes) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -629,6 +747,8 @@ func init() {
 	proto.RegisterType((*LiquidityProviderRes)(nil), "sifnode.clp.v1.LiquidityProviderRes")
 	proto.RegisterType((*AssetListReq)(nil), "sifnode.clp.v1.AssetListReq")
 	proto.RegisterType((*AssetListRes)(nil), "sifnode.clp.v1.AssetListRes")
+	proto.RegisterType((*LiquidityProviderDataReq)(nil), "sifnode.clp.v1.LiquidityProviderDataReq")
+	proto.RegisterType((*LiquidityProviderDataRes)(nil), "sifnode.clp.v1.LiquidityProviderDataRes")
 	proto.RegisterType((*LiquidityProviderListReq)(nil), "sifnode.clp.v1.LiquidityProviderListReq")
 	proto.RegisterType((*LiquidityProviderListRes)(nil), "sifnode.clp.v1.LiquidityProviderListRes")
 	proto.RegisterType((*LiquidityProvidersReq)(nil), "sifnode.clp.v1.LiquidityProvidersReq")
@@ -638,59 +758,65 @@ func init() {
 func init() { proto.RegisterFile("sifnode/clp/v1/querier.proto", fileDescriptor_5f4edede314ca3fd) }
 
 var fileDescriptor_5f4edede314ca3fd = []byte{
-	// 826 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcf, 0x4f, 0xe3, 0x46,
-	0x14, 0x8e, 0x13, 0x08, 0x30, 0x45, 0x55, 0x3b, 0x0d, 0xd4, 0x8a, 0xa8, 0x49, 0x2d, 0x0a, 0x11,
-	0xa5, 0x36, 0x81, 0x4a, 0x15, 0x6d, 0x2f, 0xe1, 0xd0, 0x5c, 0xa8, 0x94, 0xba, 0xaa, 0x2a, 0xf5,
-	0xd0, 0xc8, 0x71, 0x06, 0x67, 0x24, 0xc7, 0xe3, 0xe4, 0x39, 0x11, 0x11, 0xe5, 0xd2, 0x43, 0xd5,
-	0x63, 0x25, 0xfe, 0x01, 0x2e, 0x3d, 0xf4, 0xde, 0x7f, 0x61, 0xa5, 0x3d, 0xec, 0x01, 0x69, 0x2f,
-	0x7b, 0x5c, 0xc1, 0x1e, 0xf8, 0x33, 0x56, 0x1e, 0x8f, 0x21, 0xfe, 0x11, 0x12, 0xa1, 0xd5, 0xde,
-	0x88, 0xbf, 0x6f, 0xde, 0xfb, 0xbe, 0xef, 0xf9, 0x0d, 0x46, 0x1b, 0x40, 0x4f, 0x5d, 0xd6, 0x21,
-	0xba, 0xe5, 0x78, 0xfa, 0xa8, 0xa6, 0xf7, 0x87, 0x64, 0x40, 0xc9, 0x40, 0xf3, 0x06, 0xcc, 0x67,
-	0xf8, 0x43, 0x81, 0x6a, 0x96, 0xe3, 0x69, 0xa3, 0x5a, 0xb9, 0x64, 0x33, 0x9b, 0x71, 0x48, 0x0f,
-	0xfe, 0x0a, 0x59, 0xe5, 0x72, 0xa2, 0x86, 0x3f, 0xf6, 0x08, 0x08, 0x6c, 0xd7, 0x62, 0xd0, 0x63,
-	0xa0, 0xb7, 0x4d, 0x20, 0xbc, 0xf8, 0x58, 0x1f, 0xd5, 0xda, 0xc4, 0x37, 0x6b, 0xba, 0x67, 0xda,
-	0xd4, 0x35, 0x7d, 0xca, 0x5c, 0xc1, 0xdd, 0xb0, 0x19, 0xb3, 0x1d, 0xa2, 0x9b, 0x1e, 0xd5, 0x4d,
-	0xd7, 0x65, 0x3e, 0x07, 0x45, 0x25, 0xf5, 0x4b, 0xb4, 0xd4, 0x64, 0xcc, 0x31, 0x48, 0x1f, 0xaf,
-	0xa3, 0x22, 0x8c, 0x7b, 0x6d, 0xe6, 0xc8, 0x52, 0x45, 0xaa, 0xae, 0x18, 0xe2, 0xd7, 0xb7, 0xcb,
-	0x7f, 0x5f, 0x6d, 0xe6, 0xee, 0xae, 0x36, 0x73, 0xea, 0x38, 0x22, 0x03, 0xae, 0xa2, 0x05, 0x8f,
-	0x09, 0xea, 0x07, 0x07, 0x25, 0x2d, 0x6e, 0x49, 0xe3, 0x34, 0xce, 0xc0, 0x7b, 0x08, 0x5b, 0x8e,
-	0xd7, 0xea, 0xb1, 0xce, 0xd0, 0x21, 0x2d, 0xb3, 0xd3, 0x19, 0x10, 0x00, 0x39, 0xcf, 0x5b, 0x7c,
-	0x64, 0x39, 0xde, 0x8f, 0x1c, 0xa8, 0x87, 0xcf, 0x03, 0x11, 0x5d, 0x42, 0xed, 0xae, 0x2f, 0x17,
-	0x2a, 0x52, 0xb5, 0x60, 0x88, 0x5f, 0xaa, 0x81, 0x96, 0x83, 0x9a, 0x10, 0x08, 0xfd, 0x01, 0xa1,
-	0x07, 0x97, 0x42, 0xc1, 0xb6, 0x16, 0x46, 0xa2, 0x05, 0x91, 0x68, 0x3c, 0x12, 0x4d, 0x44, 0xa2,
-	0x35, 0x4d, 0x9b, 0x18, 0xa4, 0x3f, 0x24, 0xe0, 0x1b, 0x13, 0x27, 0xd5, 0x67, 0xd2, 0x7d, 0x51,
-	0xc0, 0xbb, 0x68, 0x31, 0x90, 0x0b, 0xb2, 0x54, 0x29, 0x4c, 0x75, 0x14, 0x52, 0xde, 0x8d, 0x25,
-	0xdc, 0x88, 0xd9, 0x58, 0xe0, 0x36, 0x76, 0x66, 0xda, 0x00, 0x8f, 0xb9, 0x40, 0x62, 0x3e, 0x7e,
-	0x45, 0xa5, 0x13, 0xda, 0x1f, 0xd2, 0x0e, 0xf5, 0xc7, 0xcd, 0x01, 0x1b, 0xd1, 0x0e, 0x19, 0x3c,
-	0x32, 0x50, 0xfc, 0x19, 0x42, 0x8e, 0x97, 0x90, 0xbd, 0xe2, 0x78, 0x42, 0xef, 0xc4, 0xbc, 0xef,
-	0xa4, 0xcc, 0xca, 0x80, 0x9b, 0x08, 0x3b, 0xd1, 0xf3, 0x96, 0x27, 0x00, 0x31, 0x89, 0xcf, 0x93,
-	0xc9, 0xa5, 0x2b, 0x7c, 0xec, 0x24, 0x1f, 0xe1, 0x7d, 0x54, 0x0a, 0xdc, 0x8c, 0x48, 0xcb, 0x04,
-	0x20, 0x7e, 0xab, 0x6d, 0x3a, 0xa6, 0x6b, 0x11, 0xa1, 0x0e, 0x87, 0x58, 0x3d, 0x80, 0x8e, 0x43,
-	0x04, 0x7f, 0x8d, 0xd6, 0xc9, 0x99, 0x4f, 0x06, 0xae, 0xe9, 0x24, 0xce, 0x14, 0xf8, 0x99, 0x52,
-	0x84, 0xc6, 0x4e, 0x3d, 0x0c, 0x63, 0x21, 0xf6, 0x7e, 0x7d, 0x83, 0x56, 0x39, 0xef, 0x84, 0x82,
-	0x1f, 0x64, 0x17, 0xcf, 0x48, 0x9a, 0x9e, 0xd1, 0x2f, 0xb1, 0x83, 0x80, 0xbf, 0x42, 0x45, 0xae,
-	0x26, 0x7a, 0x91, 0xd6, 0x92, 0x71, 0x70, 0xb6, 0x21, 0x48, 0x13, 0x7a, 0xf2, 0x31, 0x3d, 0xdf,
-	0x23, 0x39, 0x95, 0x5b, 0xa4, 0x6d, 0xf6, 0xa2, 0xfe, 0x25, 0x4d, 0x3d, 0x0e, 0xd8, 0x40, 0x9f,
-	0xa4, 0x87, 0x17, 0xc9, 0x9d, 0x63, 0x7a, 0x38, 0x35, 0xbd, 0xe9, 0x36, 0x28, 0x5a, 0x4b, 0x15,
-	0xc8, 0xd8, 0xe1, 0xfc, 0x53, 0x77, 0x78, 0xc2, 0xf3, 0x0b, 0x29, 0xbb, 0xd7, 0x7b, 0x35, 0x9c,
-	0x58, 0xea, 0xc2, 0x93, 0x97, 0xfa, 0xe0, 0xff, 0x22, 0x5a, 0xfc, 0x29, 0xa0, 0x62, 0x0b, 0x2d,
-	0x35, 0x88, 0x1f, 0xdc, 0x3f, 0xf8, 0xd3, 0xcc, 0x5b, 0x89, 0xf4, 0xcb, 0x53, 0x00, 0x50, 0xb7,
-	0xff, 0x7c, 0xf9, 0xe6, 0x32, 0x5f, 0xc1, 0x8a, 0x0e, 0xf4, 0xd4, 0xea, 0x9a, 0xd4, 0x8d, 0xfe,
-	0x9f, 0x04, 0x57, 0x99, 0x7e, 0x1e, 0xbe, 0x3a, 0x17, 0xf8, 0x77, 0xb4, 0x2c, 0x9a, 0x00, 0x96,
-	0xb3, 0x8a, 0x05, 0x53, 0x2b, 0x4f, 0x43, 0x40, 0x55, 0x78, 0x1f, 0x19, 0xaf, 0x67, 0xf6, 0x01,
-	0xfc, 0xaf, 0x84, 0x4a, 0x8d, 0x60, 0x4b, 0x92, 0x8b, 0xbf, 0x35, 0x3b, 0x7f, 0xd2, 0x2f, 0xcf,
-	0xc3, 0x02, 0xb5, 0xce, 0x45, 0x7c, 0x87, 0x8f, 0x52, 0x22, 0xd2, 0xf3, 0xbf, 0xb7, 0xae, 0x9f,
-	0x3f, 0x2c, 0xfa, 0x05, 0xfe, 0x03, 0xad, 0x36, 0x88, 0x7f, 0xbf, 0xd1, 0x78, 0x23, 0x73, 0x7d,
-	0xc5, 0x26, 0x96, 0x1f, 0x43, 0x41, 0xdd, 0xe7, 0x72, 0x76, 0x71, 0x35, 0x25, 0x27, 0xbc, 0xaf,
-	0x1c, 0x0a, 0x7e, 0xbc, 0xfb, 0xa5, 0x84, 0xd6, 0xb2, 0x52, 0x02, 0xfc, 0xc5, 0xcc, 0x00, 0xf8,
-	0x80, 0xe6, 0xa2, 0x81, 0xba, 0xc7, 0x95, 0x6d, 0xe3, 0xad, 0x39, 0x82, 0x02, 0xfc, 0x9f, 0x84,
-	0xe4, 0x2c, 0x55, 0x3c, 0xa0, 0xea, 0xcc, 0x8e, 0x51, 0x58, 0xf3, 0x32, 0x41, 0x3d, 0xe2, 0xf2,
-	0x0e, 0x71, 0x6d, 0x0e, 0x79, 0x22, 0x45, 0x31, 0xcc, 0xe3, 0xfa, 0xf3, 0x1b, 0x45, 0xba, 0xbe,
-	0x51, 0xa4, 0xd7, 0x37, 0x8a, 0xf4, 0xcf, 0xad, 0x92, 0xbb, 0xbe, 0x55, 0x72, 0xaf, 0x6e, 0x95,
-	0xdc, 0x6f, 0x3b, 0x36, 0xf5, 0xbb, 0xc3, 0xb6, 0x66, 0xb1, 0x9e, 0xfe, 0x73, 0x54, 0x36, 0xfa,
-	0xc6, 0x3a, 0xe3, 0x0d, 0xf8, 0x27, 0x56, 0xbb, 0xc8, 0xbf, 0x8c, 0x0e, 0xdf, 0x06, 0x00, 0x00,
-	0xff, 0xff, 0x70, 0x0c, 0x62, 0xbc, 0xc5, 0x09, 0x00, 0x00,
+	// 914 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x57, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xf6, 0xc4, 0x69, 0x92, 0x0e, 0x15, 0x82, 0x87, 0x93, 0x5a, 0x56, 0x70, 0xc3, 0xaa, 0xa4,
+	0x56, 0x28, 0xbb, 0x75, 0x0b, 0x42, 0x05, 0x71, 0x48, 0x85, 0x9a, 0x4b, 0x91, 0x82, 0x39, 0x20,
+	0x21, 0x81, 0x35, 0x5e, 0x4f, 0x9d, 0x91, 0x26, 0x3b, 0x6b, 0xbf, 0xb1, 0x55, 0xab, 0x54, 0x48,
+	0x88, 0x03, 0x12, 0x17, 0xa4, 0xde, 0x51, 0x2f, 0x1c, 0x38, 0xf0, 0x67, 0x20, 0x71, 0x40, 0xa2,
+	0x12, 0x17, 0xb8, 0xa1, 0xa4, 0x87, 0xfe, 0x19, 0x68, 0x67, 0x67, 0x93, 0xec, 0x0f, 0xc7, 0xab,
+	0x28, 0x02, 0xf5, 0x96, 0xdd, 0xf7, 0xcd, 0x9b, 0xef, 0x7d, 0xef, 0xcb, 0x7b, 0x5e, 0xba, 0x8e,
+	0xe2, 0x7e, 0xa0, 0xfa, 0xdc, 0xf3, 0x65, 0xe8, 0x4d, 0xda, 0xde, 0x70, 0xcc, 0x47, 0x82, 0x8f,
+	0xdc, 0x70, 0xa4, 0xb4, 0x82, 0x97, 0x6d, 0xd4, 0xf5, 0x65, 0xe8, 0x4e, 0xda, 0x8d, 0xda, 0x40,
+	0x0d, 0x94, 0x09, 0x79, 0xd1, 0x5f, 0x31, 0xaa, 0xd1, 0xc8, 0xe4, 0xd0, 0xd3, 0x90, 0xa3, 0x8d,
+	0x6d, 0xf9, 0x0a, 0xf7, 0x15, 0x7a, 0x3d, 0x86, 0xdc, 0x24, 0x9f, 0x7a, 0x93, 0x76, 0x8f, 0x6b,
+	0xd6, 0xf6, 0x42, 0x36, 0x10, 0x01, 0xd3, 0x42, 0x05, 0x16, 0xbb, 0x3e, 0x50, 0x6a, 0x20, 0xb9,
+	0xc7, 0x42, 0xe1, 0xb1, 0x20, 0x50, 0xda, 0x04, 0x6d, 0x26, 0xe7, 0x2d, 0xba, 0xbc, 0xab, 0x94,
+	0xec, 0xf0, 0x21, 0xac, 0xd1, 0x25, 0x9c, 0xee, 0xf7, 0x94, 0xac, 0x93, 0x0d, 0xd2, 0xba, 0xd8,
+	0xb1, 0x4f, 0xef, 0xaf, 0x7c, 0xf7, 0xe4, 0x4a, 0xe5, 0xf9, 0x93, 0x2b, 0x15, 0x67, 0x9a, 0x80,
+	0x11, 0x5a, 0x74, 0x31, 0x54, 0x16, 0xfa, 0xd2, 0xcd, 0x9a, 0x9b, 0x2e, 0xc9, 0x35, 0x30, 0x83,
+	0x80, 0xeb, 0x14, 0x7c, 0x19, 0x76, 0xf7, 0x55, 0x7f, 0x2c, 0x79, 0x97, 0xf5, 0xfb, 0x23, 0x8e,
+	0x58, 0x5f, 0x30, 0x57, 0xbc, 0xe2, 0xcb, 0xf0, 0x63, 0x13, 0xd8, 0x8e, 0xdf, 0x47, 0x24, 0xf6,
+	0xb8, 0x18, 0xec, 0xe9, 0x7a, 0x75, 0x83, 0xb4, 0xaa, 0x1d, 0xfb, 0xe4, 0x74, 0xe8, 0x4a, 0x94,
+	0x13, 0x23, 0xa2, 0x77, 0x29, 0x3d, 0xae, 0xd2, 0x32, 0xd8, 0x74, 0x63, 0x49, 0xdc, 0x48, 0x12,
+	0xd7, 0x48, 0xe2, 0x5a, 0x49, 0xdc, 0x5d, 0x36, 0xe0, 0x1d, 0x3e, 0x1c, 0x73, 0xd4, 0x9d, 0x13,
+	0x27, 0x9d, 0x5f, 0xc9, 0x51, 0x52, 0x84, 0x2d, 0x7a, 0x21, 0xa2, 0x8b, 0x75, 0xb2, 0x51, 0x9d,
+	0x59, 0x51, 0x0c, 0x39, 0x9f, 0x92, 0x60, 0x27, 0x55, 0xc6, 0xa2, 0x29, 0xe3, 0xda, 0xdc, 0x32,
+	0x30, 0x54, 0x01, 0xf2, 0x54, 0x1d, 0x9f, 0xd1, 0xda, 0x3d, 0x31, 0x1c, 0x8b, 0xbe, 0xd0, 0xd3,
+	0xdd, 0x91, 0x9a, 0x88, 0x3e, 0x1f, 0x9d, 0xd2, 0x50, 0x78, 0x9d, 0x52, 0x19, 0x66, 0x68, 0x5f,
+	0x94, 0xa1, 0xe5, 0x7b, 0xa2, 0xdf, 0xcf, 0x49, 0x61, 0x66, 0x84, 0x5d, 0x0a, 0x32, 0x79, 0xdf,
+	0x0d, 0x6d, 0xc0, 0x76, 0xe2, 0x8d, 0xac, 0x72, 0xf9, 0x0c, 0xaf, 0xca, 0xec, 0x2b, 0xb8, 0x41,
+	0x6b, 0x51, 0x35, 0x13, 0xde, 0x65, 0x88, 0x5c, 0x77, 0x7b, 0x4c, 0xb2, 0xc0, 0xe7, 0x96, 0x1d,
+	0xc4, 0xb1, 0xed, 0x28, 0x74, 0x27, 0x8e, 0xc0, 0x3b, 0x74, 0x8d, 0x3f, 0xd0, 0x7c, 0x14, 0x30,
+	0x99, 0x39, 0x53, 0x35, 0x67, 0x6a, 0x49, 0x34, 0x75, 0xea, 0xb8, 0x19, 0x8b, 0x29, 0x7f, 0x7d,
+	0x4d, 0x2f, 0x19, 0xdc, 0x3d, 0x81, 0x3a, 0xd2, 0x2e, 0xad, 0x11, 0xc9, 0x68, 0x94, 0xb1, 0xe0,
+	0xc2, 0x59, 0x2d, 0x78, 0x42, 0xeb, 0x1f, 0x49, 0x8a, 0x01, 0xc2, 0xdb, 0x74, 0xc9, 0x94, 0x95,
+	0x38, 0x72, 0x35, 0xab, 0xab, 0x41, 0x77, 0x2c, 0xe8, 0x44, 0x61, 0x0b, 0xa7, 0xb8, 0xac, 0x7a,
+	0x76, 0x97, 0x7d, 0x4f, 0x68, 0x3d, 0xd7, 0xca, 0x8f, 0x98, 0x66, 0xff, 0x8b, 0x5c, 0x7f, 0xcf,
+	0x66, 0x83, 0xf0, 0x05, 0xbd, 0x9c, 0xb7, 0x67, 0xb7, 0xcf, 0x34, 0xb3, 0x5a, 0xbe, 0x39, 0xd7,
+	0xa3, 0x26, 0xd5, 0xaa, 0x2c, 0x7a, 0x3d, 0x53, 0xea, 0xbb, 0x05, 0x52, 0x9f, 0x65, 0x2e, 0x7d,
+	0x5b, 0x54, 0x5b, 0x62, 0xcc, 0x59, 0xff, 0xd4, 0xe7, 0x2f, 0xf1, 0x1f, 0xb3, 0x69, 0x20, 0x74,
+	0xe8, 0x6b, 0x79, 0x89, 0x13, 0xab, 0x96, 0x18, 0x01, 0x90, 0x93, 0xf6, 0x3f, 0xb0, 0xb0, 0xa0,
+	0xab, 0x39, 0x26, 0x05, 0x1b, 0xe5, 0x3c, 0xc4, 0xfb, 0x9d, 0x14, 0xdf, 0xf5, 0x62, 0x2a, 0x77,
+	0xf3, 0xd9, 0x32, 0xbd, 0xf0, 0x49, 0x04, 0x05, 0x9f, 0x2e, 0xef, 0x70, 0x1d, 0x6d, 0x43, 0xb8,
+	0x5c, 0xb8, 0x23, 0xf9, 0xb0, 0x31, 0x23, 0x80, 0xce, 0xe6, 0x37, 0x7f, 0x3e, 0x7b, 0xbc, 0xb0,
+	0x01, 0x4d, 0x0f, 0xc5, 0x7d, 0x7f, 0x8f, 0x89, 0x20, 0xf9, 0x75, 0x13, 0x2d, 0x56, 0xef, 0x61,
+	0xec, 0xe5, 0x47, 0xf0, 0x25, 0x5d, 0xb1, 0x97, 0x20, 0xd4, 0x8b, 0x92, 0x45, 0x5d, 0x6b, 0xcc,
+	0x8a, 0xa0, 0xd3, 0x34, 0xf7, 0xd4, 0x61, 0xad, 0xf0, 0x1e, 0x84, 0x9f, 0x08, 0xad, 0xed, 0x44,
+	0xa3, 0x36, 0xbb, 0x86, 0xae, 0xce, 0xd7, 0x9f, 0x0f, 0x1b, 0x65, 0x50, 0xe8, 0x6c, 0x1b, 0x12,
+	0x1f, 0xc0, 0xed, 0x1c, 0x89, 0x7c, 0xff, 0x8f, 0x4a, 0xf7, 0x1e, 0x1e, 0xcf, 0xd1, 0x47, 0xf0,
+	0x0b, 0xa1, 0xf5, 0x22, 0x9e, 0x66, 0x0c, 0xb5, 0xca, 0x0d, 0x31, 0x3e, 0x6c, 0x94, 0x45, 0xa2,
+	0xf3, 0xa1, 0xe1, 0xfc, 0x1e, 0xbc, 0x5b, 0x82, 0xb3, 0x19, 0xa8, 0x69, 0xbe, 0x5f, 0xd1, 0x4b,
+	0x3b, 0x5c, 0x1f, 0xad, 0x31, 0x58, 0x2f, 0xdc, 0x59, 0x76, 0x94, 0x35, 0x4e, 0x8b, 0xa2, 0x73,
+	0xc3, 0x50, 0xd9, 0x82, 0x56, 0x8e, 0x4a, 0xbc, 0xed, 0xa5, 0x40, 0x9d, 0xbe, 0xfd, 0x31, 0xa1,
+	0xab, 0x45, 0x6a, 0x21, 0xcc, 0x9f, 0xf7, 0xc6, 0x50, 0xa5, 0x60, 0xe8, 0x5c, 0x37, 0xcc, 0x36,
+	0xe1, 0x6a, 0x09, 0x91, 0x10, 0x7e, 0x9e, 0xd1, 0x43, 0x23, 0xd0, 0xfc, 0xce, 0x24, 0x62, 0x95,
+	0x45, 0xa2, 0x73, 0xdb, 0xd0, 0xbb, 0x05, 0xed, 0x32, 0x3d, 0x8c, 0x55, 0xb4, 0xe6, 0xbb, 0xb3,
+	0xfd, 0xdb, 0x41, 0x93, 0x3c, 0x3d, 0x68, 0x92, 0x7f, 0x0e, 0x9a, 0xe4, 0x87, 0xc3, 0x66, 0xe5,
+	0xe9, 0x61, 0xb3, 0xf2, 0xd7, 0x61, 0xb3, 0xf2, 0xf9, 0xb5, 0x81, 0xd0, 0x7b, 0xe3, 0x9e, 0xeb,
+	0xab, 0x7d, 0xef, 0xd3, 0x24, 0x6d, 0xf2, 0x85, 0xf2, 0xc0, 0x5c, 0x60, 0x3e, 0x50, 0x7a, 0x4b,
+	0xe6, 0xbb, 0xe2, 0xd6, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xe6, 0x99, 0x09, 0x80, 0x03, 0x0d,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -708,6 +834,7 @@ type QueryClient interface {
 	GetPool(ctx context.Context, in *PoolReq, opts ...grpc.CallOption) (*PoolRes, error)
 	GetPools(ctx context.Context, in *PoolsReq, opts ...grpc.CallOption) (*PoolsRes, error)
 	GetLiquidityProvider(ctx context.Context, in *LiquidityProviderReq, opts ...grpc.CallOption) (*LiquidityProviderRes, error)
+	GetLiquidityProviderData(ctx context.Context, in *LiquidityProviderDataReq, opts ...grpc.CallOption) (*LiquidityProviderDataRes, error)
 	GetAssetList(ctx context.Context, in *AssetListReq, opts ...grpc.CallOption) (*AssetListRes, error)
 	GetLiquidityProviders(ctx context.Context, in *LiquidityProvidersReq, opts ...grpc.CallOption) (*LiquidityProvidersRes, error)
 	GetLiquidityProviderList(ctx context.Context, in *LiquidityProviderListReq, opts ...grpc.CallOption) (*LiquidityProviderListRes, error)
@@ -748,6 +875,15 @@ func (c *queryClient) GetLiquidityProvider(ctx context.Context, in *LiquidityPro
 	return out, nil
 }
 
+func (c *queryClient) GetLiquidityProviderData(ctx context.Context, in *LiquidityProviderDataReq, opts ...grpc.CallOption) (*LiquidityProviderDataRes, error) {
+	out := new(LiquidityProviderDataRes)
+	err := c.cc.Invoke(ctx, "/sifnode.clp.v1.Query/GetLiquidityProviderData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) GetAssetList(ctx context.Context, in *AssetListReq, opts ...grpc.CallOption) (*AssetListRes, error) {
 	out := new(AssetListRes)
 	err := c.cc.Invoke(ctx, "/sifnode.clp.v1.Query/GetAssetList", in, out, opts...)
@@ -780,6 +916,7 @@ type QueryServer interface {
 	GetPool(context.Context, *PoolReq) (*PoolRes, error)
 	GetPools(context.Context, *PoolsReq) (*PoolsRes, error)
 	GetLiquidityProvider(context.Context, *LiquidityProviderReq) (*LiquidityProviderRes, error)
+	GetLiquidityProviderData(context.Context, *LiquidityProviderDataReq) (*LiquidityProviderDataRes, error)
 	GetAssetList(context.Context, *AssetListReq) (*AssetListRes, error)
 	GetLiquidityProviders(context.Context, *LiquidityProvidersReq) (*LiquidityProvidersRes, error)
 	GetLiquidityProviderList(context.Context, *LiquidityProviderListReq) (*LiquidityProviderListRes, error)
@@ -797,6 +934,9 @@ func (*UnimplementedQueryServer) GetPools(ctx context.Context, req *PoolsReq) (*
 }
 func (*UnimplementedQueryServer) GetLiquidityProvider(ctx context.Context, req *LiquidityProviderReq) (*LiquidityProviderRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetLiquidityProvider not implemented")
+}
+func (*UnimplementedQueryServer) GetLiquidityProviderData(ctx context.Context, req *LiquidityProviderDataReq) (*LiquidityProviderDataRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLiquidityProviderData not implemented")
 }
 func (*UnimplementedQueryServer) GetAssetList(ctx context.Context, req *AssetListReq) (*AssetListRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAssetList not implemented")
@@ -862,6 +1002,24 @@ func _Query_GetLiquidityProvider_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).GetLiquidityProvider(ctx, req.(*LiquidityProviderReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_GetLiquidityProviderData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LiquidityProviderDataReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).GetLiquidityProviderData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sifnode.clp.v1.Query/GetLiquidityProviderData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).GetLiquidityProviderData(ctx, req.(*LiquidityProviderDataReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -935,6 +1093,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetLiquidityProvider",
 			Handler:    _Query_GetLiquidityProvider_Handler,
+		},
+		{
+			MethodName: "GetLiquidityProviderData",
+			Handler:    _Query_GetLiquidityProviderData_Handler,
 		},
 		{
 			MethodName: "GetAssetList",
@@ -1237,6 +1399,18 @@ func (m *AssetListReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuerier(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.LpAddress) > 0 {
 		i -= len(m.LpAddress)
 		copy(dAtA[i:], m.LpAddress)
@@ -1267,6 +1441,18 @@ func (m *AssetListRes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuerier(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if m.Height != 0 {
 		i = encodeVarintQuerier(dAtA, i, uint64(m.Height))
 		i--
@@ -1276,6 +1462,102 @@ func (m *AssetListRes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		for iNdEx := len(m.Assets) - 1; iNdEx >= 0; iNdEx-- {
 			{
 				size, err := m.Assets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuerier(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *LiquidityProviderDataReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LiquidityProviderDataReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LiquidityProviderDataReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuerier(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.LpAddress) > 0 {
+		i -= len(m.LpAddress)
+		copy(dAtA[i:], m.LpAddress)
+		i = encodeVarintQuerier(dAtA, i, uint64(len(m.LpAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *LiquidityProviderDataRes) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LiquidityProviderDataRes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LiquidityProviderDataRes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuerier(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Height != 0 {
+		i = encodeVarintQuerier(dAtA, i, uint64(m.Height))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.LiquidityProviderData) > 0 {
+		for iNdEx := len(m.LiquidityProviderData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.LiquidityProviderData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -1309,6 +1591,18 @@ func (m *LiquidityProviderListReq) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuerier(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Symbol) > 0 {
 		i -= len(m.Symbol)
 		copy(dAtA[i:], m.Symbol)
@@ -1339,6 +1633,18 @@ func (m *LiquidityProviderListRes) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuerier(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if m.Height != 0 {
 		i = encodeVarintQuerier(dAtA, i, uint64(m.Height))
 		i--
@@ -1584,6 +1890,10 @@ func (m *AssetListReq) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuerier(uint64(l))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuerier(uint64(l))
+	}
 	return n
 }
 
@@ -1602,6 +1912,49 @@ func (m *AssetListRes) Size() (n int) {
 	if m.Height != 0 {
 		n += 1 + sovQuerier(uint64(m.Height))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuerier(uint64(l))
+	}
+	return n
+}
+
+func (m *LiquidityProviderDataReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.LpAddress)
+	if l > 0 {
+		n += 1 + l + sovQuerier(uint64(l))
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuerier(uint64(l))
+	}
+	return n
+}
+
+func (m *LiquidityProviderDataRes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.LiquidityProviderData) > 0 {
+		for _, e := range m.LiquidityProviderData {
+			l = e.Size()
+			n += 1 + l + sovQuerier(uint64(l))
+		}
+	}
+	if m.Height != 0 {
+		n += 1 + sovQuerier(uint64(m.Height))
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuerier(uint64(l))
+	}
 	return n
 }
 
@@ -1613,6 +1966,10 @@ func (m *LiquidityProviderListReq) Size() (n int) {
 	_ = l
 	l = len(m.Symbol)
 	if l > 0 {
+		n += 1 + l + sovQuerier(uint64(l))
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
 		n += 1 + l + sovQuerier(uint64(l))
 	}
 	return n
@@ -1632,6 +1989,10 @@ func (m *LiquidityProviderListRes) Size() (n int) {
 	}
 	if m.Height != 0 {
 		n += 1 + sovQuerier(uint64(m.Height))
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuerier(uint64(l))
 	}
 	return n
 }
@@ -2497,6 +2858,42 @@ func (m *AssetListReq) Unmarshal(dAtA []byte) error {
 			}
 			m.LpAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuerier(dAtA[iNdEx:])
@@ -2600,6 +2997,299 @@ func (m *AssetListRes) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuerier(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LiquidityProviderDataReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuerier
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LiquidityProviderDataReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LiquidityProviderDataReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LpAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuerier(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LiquidityProviderDataRes) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuerier
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LiquidityProviderDataRes: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LiquidityProviderDataRes: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LiquidityProviderData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LiquidityProviderData = append(m.LiquidityProviderData, &LiquidityProviderData{})
+			if err := m.LiquidityProviderData[len(m.LiquidityProviderData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
+			}
+			m.Height = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Height |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuerier(dAtA[iNdEx:])
@@ -2681,6 +3371,42 @@ func (m *LiquidityProviderListReq) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Symbol = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2785,6 +3511,42 @@ func (m *LiquidityProviderListRes) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuerier
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuerier
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuerier(dAtA[iNdEx:])
