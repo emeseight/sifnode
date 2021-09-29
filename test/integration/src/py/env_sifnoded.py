@@ -57,6 +57,7 @@ def build_chain(args: SifnodedRunner):
         raise Exception(f"failed to execute {network_create_cmd}: {ox}")
     with open(fields["network_config_file"]) as f:
         validators = yaml.safe_load(f)
+        print(validators)
         print(f"ncc: \n{network_create_cmd}")
     for v in validators:
         p = v["password"]
@@ -67,6 +68,9 @@ def build_chain(args: SifnodedRunner):
         v["sifnodeclipath"] = sifnodeclipath
         v["sifnodedpath"] = sifnodedpath
         m = v["moniker"]
+        print(f"yes {p} | {args.bin_prefix}/sifnoded keys show -a --bech val {m} --home {sifnodeclipath}")
+        # if not m or m == "":
+        #     raise Exception(f"moniker is empty")
         o = subprocess.run(
             f"yes {p} | {args.bin_prefix}/sifnoded keys show -a --bech val {m} --home {sifnodeclipath}",
             shell=True,
@@ -75,6 +79,8 @@ def build_chain(args: SifnodedRunner):
         )
         valoper = o.stdout.strip()
         v["sifvaloper"] = valoper
+        # if not valoper or valoper == "":
+        #     raise Exception(f"valoper is empty")
         subprocess.run(
             f"{args.bin_prefix}/sifnoded add-genesis-validators {valoper} --home {sifnodedpath}",
             shell=True,
