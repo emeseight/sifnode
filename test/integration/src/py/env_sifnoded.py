@@ -39,7 +39,9 @@ def set_fields(args: SifnodedRunner):
 def sifgen_network_create_cmd(args: SifnodedRunner, fields) -> str:
     ndir = fields["networkdir"]
     nf = fields["network_config_file"]
-    return f"{args.bin_prefix}/sifgen network create {args.chain_id} {args.n_validators} {ndir} {args.seed_ip_address} {nf}"
+    # In the current version running without "--keyring-backend test" will fail (stderr="Not implemented", exit_value=1)
+    return f"{args.bin_prefix}/sifgen network create {args.chain_id} {args.n_validators} {ndir} {args.seed_ip_address} " \
+           f"{nf} --keyring-backend test"
 
 
 def build_chain(args: SifnodedRunner):
@@ -63,16 +65,18 @@ def build_chain(args: SifnodedRunner):
         p = v["password"]
         nd = fields["networkdir"]
         base_path = os.path.join(nd, "validators", args.chain_id, v["moniker"])
-        sifnodeclipath = os.path.join(base_path, ".sifnodecli")
+        # There is no .sifnodecli, just .sifnoded, perhaps .sifnodecli existed in the past?
+        # sifnodeclipath = os.path.join(base_path, ".sifnodecli")
         sifnodedpath = os.path.join(base_path, ".sifnoded")
+        sifnodeclipath = sifnodedpath
         v["sifnodeclipath"] = sifnodeclipath
         v["sifnodedpath"] = sifnodedpath
         m = v["moniker"]
-        print(f"yes {p} | {args.bin_prefix}/sifnoded keys show -a --bech val {m} --home {sifnodeclipath}")
+        print(f"yes {p} | {args.bin_prefix}/sifnoded keys show -a --bech val {m} --home {sifnodeclipath} --keyring-backend test")
         # if not m or m == "":
         #     raise Exception(f"moniker is empty")
         o = subprocess.run(
-            f"yes {p} | {args.bin_prefix}/sifnoded keys show -a --bech val {m} --home {sifnodeclipath}",
+            f"yes {p} | {args.bin_prefix}/sifnoded keys show -a --bech val {m} --home {sifnodeclipath} --keyring-backend test",
             shell=True,
             text=True,
             capture_output=True
