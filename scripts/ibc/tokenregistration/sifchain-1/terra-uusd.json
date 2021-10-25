@@ -1,6 +1,7 @@
 {
   "entries": [
     {
+      "is_whitelisted": true,
       "decimals": "6",
       "denom": "ibc/17F5C77854734CFE1301E6067AA42CDF62DAF836E4467C635E6DB407853C6082",
       "base_denom": "uusd",

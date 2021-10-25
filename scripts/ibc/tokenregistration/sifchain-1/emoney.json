@@ -1,6 +1,7 @@
 {
   "entries": [
     {
+      "is_whitelisted": true,
       "decimals": "6",
       "denom": "ibc/ACA7D0100794F39DF3FF0C5E31638B24737321C24F32C2C486A24C78DD8F2029",
       "base_denom": "ungm",

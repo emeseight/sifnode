@@ -3,11 +3,11 @@
     {
       "is_whitelisted": true,
       "decimals": "6",
-      "denom": "ibc/7B8A3357032F3DB000ACFF3B2C9F8E77B932F21004FC93B5A8F77DE24161A573",
-      "base_denom": "eeur",
+      "denom": "",
+      "base_denom": "",
       "path": "",
-      "ibc_channel_id": "channel-19",
-      "ibc_counterparty_channel_id": "channel-14",
+      "ibc_channel_id": "",
+      "ibc_counterparty_channel_id": "",
       "display_name": "",
       "display_symbol": "",
       "network": "",
@@ -21,7 +21,7 @@
       ],
       "unit_denom": "",
       "ibc_counterparty_denom": "",
-      "ibc_counterparty_chain_id": "emoney-3"
+      "ibc_counterparty_chain_id": ""
     }
   ]
 }
