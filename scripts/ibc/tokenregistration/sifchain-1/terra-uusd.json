@@ -2,8 +2,8 @@
   "entries": [
     {
       "decimals": "6",
-      "denom": "ibc/F141935FF02B74BDC6B8A0BD6FE86A23EE25D10E89AA0CD9158B3D92B63FDF4D",
-      "base_denom": "uluna",
+      "denom": "ibc/17F5C77854734CFE1301E6067AA42CDF62DAF836E4467C635E6DB407853C6082",
+      "base_denom": "uusd",
       "path": "",
       "ibc_channel_id": "channel-18",
       "ibc_counterparty_channel_id": "channel-7",
