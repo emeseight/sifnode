@@ -17,6 +17,9 @@ require (
 	github.com/miguelmota/go-solidity-sha3 v0.1.0
 	github.com/onsi/ginkgo v1.14.2
 	github.com/onsi/gomega v1.10.5
+	github.com/pelletier/go-toml v1.8.1 // indirect
+	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2
+	github.com/philhofer/fwd v1.1.1 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rakyll/statik v0.1.7
 	github.com/sethvargo/go-password v0.2.0
@@ -110,7 +113,6 @@ require (
 	github.com/nxadm/tail v1.4.4 // indirect
 	github.com/olekukonko/tablewriter v0.0.0-20170122224234-a0225b3f23b5 // indirect
 	github.com/pborman/uuid v1.2.0 // indirect
-	github.com/pelletier/go-toml v1.8.1 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.10.0 // indirect
@@ -146,6 +148,7 @@ require (
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
+	gopkg.in/DataDog/dd-trace-go.v1 v1.31.1
 	gopkg.in/ini.v1 v1.61.0 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 	gopkg.in/olebedev/go-duktape.v3 v3.0.0-20200619000410-60c24ae608a6 // indirect
