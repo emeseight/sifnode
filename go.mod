@@ -9,7 +9,7 @@ require (
 	github.com/cosmos/cosmos-sdk v0.44.3
 	github.com/cosmos/ibc-go/v2 v2.0.0
 	github.com/deckarep/golang-set v1.7.1 // indirect
-	github.com/ethereum/go-ethereum v1.10.11
+	github.com/ethereum/go-ethereum v1.10.13
 	github.com/gballet/go-libpcsclite v0.0.0-20191108122812-4678299bea08 // indirect
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/mock v1.6.0
@@ -109,7 +109,6 @@ require (
 	github.com/mtibben/percent v0.2.1 // indirect
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
-	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.11.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
@@ -144,8 +143,6 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
 )
-
-require github.com/aws/aws-lambda-go v1.13.3
 
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
