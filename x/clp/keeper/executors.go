@@ -36,7 +36,9 @@ func (k Keeper) CreatePool(ctx sdk.Context, poolUints sdk.Uint, msg *types.MsgCr
 		return nil, types.ErrBalanceNotAvailable
 	}
 
-	pool, err := types.NewPool(msg.ExternalAsset, msg.NativeAssetAmount, msg.ExternalAssetAmount, poolUints)
+	// (testing) this part can not be triggered, because newPool always return nil err LOL.
+	// solution: just removed.
+	pool := types.NewPool(msg.ExternalAsset, msg.NativeAssetAmount, msg.ExternalAssetAmount, poolUints)
 	if err != nil {
 		return nil, sdkerrors.Wrap(types.ErrUnableToCreatePool, err.Error())
 	}
@@ -48,6 +50,8 @@ func (k Keeper) CreatePool(ctx sdk.Context, poolUints sdk.Uint, msg *types.MsgCr
 	}
 
 	// Pool creator becomes the first LP
+	// (testing) this part I think can never be triggered. if no err above
+	//
 	err = k.SetPool(ctx, &pool)
 	if err != nil {
 		return nil, sdkerrors.Wrap(types.ErrUnableToSetPool, err.Error())
@@ -91,7 +95,7 @@ func (k Keeper) AddLiquidity(ctx sdk.Context, msg *types.MsgAddLiquidity, pool t
 	if err != nil {
 		return nil, err
 	}
-
+	// (testing) this part I think can never be triggered. because if the balance is 0 for above coins object cannot be created
 	if !k.bankKeeper.HasBalance(ctx, addr, coins[0]) && !k.bankKeeper.HasBalance(ctx, addr, coins[1]) {
 		return nil, types.ErrBalanceNotAvailable
 	}
@@ -170,6 +174,7 @@ func (k Keeper) RemoveLiquidity(ctx sdk.Context, pool types.Pool, externalAssetC
 	if externalAssetCoin.Amount.GTE(sdk.Int(poolOriginalEB)) || nativeAssetCoin.Amount.GTE(sdk.Int(poolOriginalNB)) {
 		return sdkerrors.Wrap(types.ErrPoolTooShallow, "Pool Balance nil after adjusting asymmetry")
 	}
+
 	err = k.SetPool(ctx, &pool)
 	if err != nil {
 		return sdkerrors.Wrap(types.ErrUnableToSetPool, err.Error())
@@ -183,6 +188,7 @@ func (k Keeper) RemoveLiquidity(ctx sdk.Context, pool types.Pool, externalAssetC
 		}
 		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, lpAddr, sendCoins)
 		if err != nil {
+			// (testing) this part I don't know how to trigger. because we verify if have coins in lp.
 			return err
 		}
 	}
@@ -202,6 +208,7 @@ func (k Keeper) InitiateSwap(ctx sdk.Context, sentCoin sdk.Coin, swapper sdk.Acc
 	}
 	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, swapper, types.ModuleName, sdk.NewCoins(sentCoin))
 	if err != nil {
+		// (testing) this part I don't know how to trigger. because we verify if have balance.
 		return err
 	}
 	return nil

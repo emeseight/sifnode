@@ -1,11 +1,14 @@
 package types
 
 import (
+	//"fmt"
+
 	"bytes"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func NewSigner(signer string) sdk.AccAddress {
@@ -52,6 +55,10 @@ func TestNewMsgCreatePool(t *testing.T) {
 	newpool = NewMsgCreatePool(signer, wrongAsset, sdk.NewUint(1000), sdk.NewUint(100))
 	err = newpool.ValidateBasic()
 	assert.Error(t, err)
+	str := newpool.Route()
+	assert.Equal(t, str, "clp")
+	str = newpool.Type()
+	assert.Equal(t, str, "create_pool")
 }
 
 func TestNewMsgDecommissionPool(t *testing.T) {
