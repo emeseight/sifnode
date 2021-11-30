@@ -1,0 +1,1 @@
+[{"inputs":[],"name":"bridgeBank","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"hasBridgeBank","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]
