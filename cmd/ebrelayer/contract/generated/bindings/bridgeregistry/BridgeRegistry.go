@@ -4,6 +4,7 @@
 package BridgeRegistry
 
 import (
+	"errors"
 	"math/big"
 	"strings"
 
@@ -17,6 +18,7 @@ import (
 
 // Reference imports to suppress errors if they are not otherwise used.
 var (
+	_ = errors.New
 	_ = big.NewInt
 	_ = strings.NewReader
 	_ = ethereum.NotFound
@@ -26,8 +28,14 @@ var (
 	_ = event.NewSubscription
 )
 
+// BridgeRegistryMetaData contains all meta data concerning the BridgeRegistry contract.
+var BridgeRegistryMetaData = &bind.MetaData{
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_cosmosBridge\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_bridgeBank\",\"type\":\"address\"}],\"name\":\"LogContractsRegistered\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"bridgeBank\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cosmosBridge\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_cosmosBridge\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_bridgeBank\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+}
+
 // BridgeRegistryABI is the input ABI used to generate the binding from.
-const BridgeRegistryABI = "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_cosmosBridge\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_bridgeBank\",\"type\":\"address\"}],\"name\":\"LogContractsRegistered\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"bridgeBank\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cosmosBridge\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_cosmosBridge\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_bridgeBank\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
+// Deprecated: Use BridgeRegistryMetaData.ABI instead.
+var BridgeRegistryABI = BridgeRegistryMetaData.ABI
 
 // BridgeRegistry is an auto generated Go binding around an Ethereum contract.
 type BridgeRegistry struct {
@@ -137,7 +145,7 @@ func bindBridgeRegistry(address common.Address, caller bind.ContractCaller, tran
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_BridgeRegistry *BridgeRegistryRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_BridgeRegistry *BridgeRegistryRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _BridgeRegistry.Contract.BridgeRegistryCaller.contract.Call(opts, result, method, params...)
 }
 
@@ -156,7 +164,7 @@ func (_BridgeRegistry *BridgeRegistryRaw) Transact(opts *bind.TransactOpts, meth
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_BridgeRegistry *BridgeRegistryCallerRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_BridgeRegistry *BridgeRegistryCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _BridgeRegistry.Contract.contract.Call(opts, result, method, params...)
 }
 
@@ -175,12 +183,17 @@ func (_BridgeRegistry *BridgeRegistryTransactorRaw) Transact(opts *bind.Transact
 //
 // Solidity: function bridgeBank() view returns(address)
 func (_BridgeRegistry *BridgeRegistryCaller) BridgeBank(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _BridgeRegistry.contract.Call(opts, out, "bridgeBank")
-	return *ret0, err
+	var out []interface{}
+	err := _BridgeRegistry.contract.Call(opts, &out, "bridgeBank")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // BridgeBank is a free data retrieval call binding the contract method 0x0e41f373.
@@ -201,12 +214,17 @@ func (_BridgeRegistry *BridgeRegistryCallerSession) BridgeBank() (common.Address
 //
 // Solidity: function cosmosBridge() view returns(address)
 func (_BridgeRegistry *BridgeRegistryCaller) CosmosBridge(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _BridgeRegistry.contract.Call(opts, out, "cosmosBridge")
-	return *ret0, err
+	var out []interface{}
+	err := _BridgeRegistry.contract.Call(opts, &out, "cosmosBridge")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // CosmosBridge is a free data retrieval call binding the contract method 0xb0e9ef71.
@@ -375,5 +393,6 @@ func (_BridgeRegistry *BridgeRegistryFilterer) ParseLogContractsRegistered(log t
 	if err := _BridgeRegistry.contract.UnpackLog(event, "LogContractsRegistered", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }

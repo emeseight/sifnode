@@ -76,7 +76,7 @@ async function main() {
     //}
 
     // create go bindings for this contract
-    const targetGoDirectory = `${BASE_TARGET_DIR}/${TARGET_GO_DIR}/${internalPath}`;
+    const targetGoDirectory = `${BASE_TARGET_DIR}/${TARGET_GO_DIR}/${internalPath.toLowerCase()}`;
     const targetGoFileName = `${targetGoDirectory}/${strippedFilename}.go`;
     //if (fs.existsSync(targetGoFileName)) {
     createDir(targetGoDirectory);

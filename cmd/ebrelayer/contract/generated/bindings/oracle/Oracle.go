@@ -4,6 +4,7 @@
 package Oracle
 
 import (
+	"errors"
 	"math/big"
 	"strings"
 
@@ -17,6 +18,7 @@ import (
 
 // Reference imports to suppress errors if they are not otherwise used.
 var (
+	_ = errors.New
 	_ = big.NewInt
 	_ = strings.NewReader
 	_ = ethereum.NotFound
@@ -26,8 +28,14 @@ var (
 	_ = event.NewSubscription
 )
 
+// OracleMetaData contains all meta data concerning the Oracle contract.
+var OracleMetaData = &bind.MetaData{
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"LogNewOracleClaim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerCurrent\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerThreshold\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"}],\"name\":\"LogProphecyProcessed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorPowerUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetReset\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_validatorPower\",\"type\":\"uint256\"}],\"name\":\"addValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"consensusThreshold\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cosmosBridge\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currentValsetVersion\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"signedPower\",\"type\":\"uint256\"}],\"name\":\"getProphecyStatus\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"getValidatorPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"isActiveValidator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"operator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"powers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_valsetVersion\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"recoverGas\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"removeValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_newValidatorPower\",\"type\":\"uint256\"}],\"name\":\"updateValidatorPower\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_validators\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_powers\",\"type\":\"uint256[]\"}],\"name\":\"updateValset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"validatorCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"validators\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+}
+
 // OracleABI is the input ABI used to generate the binding from.
-const OracleABI = "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"LogNewOracleClaim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerCurrent\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerThreshold\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"}],\"name\":\"LogProphecyProcessed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorPowerUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetReset\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_validatorPower\",\"type\":\"uint256\"}],\"name\":\"addValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"consensusThreshold\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cosmosBridge\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currentValsetVersion\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"signedPower\",\"type\":\"uint256\"}],\"name\":\"getProphecyStatus\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"getValidatorPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"hasMadeClaim\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"isActiveValidator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastNonceSubmitted\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"operator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"oracleClaimValidators\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"powers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"prophecyRedeemed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_valsetVersion\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"recoverGas\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"removeValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_newValidatorPower\",\"type\":\"uint256\"}],\"name\":\"updateValidatorPower\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_validators\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_powers\",\"type\":\"uint256[]\"}],\"name\":\"updateValset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"validatorCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"validators\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]"
+// Deprecated: Use OracleMetaData.ABI instead.
+var OracleABI = OracleMetaData.ABI
 
 // Oracle is an auto generated Go binding around an Ethereum contract.
 type Oracle struct {
@@ -137,7 +145,7 @@ func bindOracle(address common.Address, caller bind.ContractCaller, transactor b
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_Oracle *OracleRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_Oracle *OracleRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _Oracle.Contract.OracleCaller.contract.Call(opts, result, method, params...)
 }
 
@@ -156,7 +164,7 @@ func (_Oracle *OracleRaw) Transact(opts *bind.TransactOpts, method string, param
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_Oracle *OracleCallerRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_Oracle *OracleCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _Oracle.Contract.contract.Call(opts, result, method, params...)
 }
 
@@ -175,12 +183,17 @@ func (_Oracle *OracleTransactorRaw) Transact(opts *bind.TransactOpts, method str
 //
 // Solidity: function consensusThreshold() view returns(uint256)
 func (_Oracle *OracleCaller) ConsensusThreshold(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "consensusThreshold")
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "consensusThreshold")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // ConsensusThreshold is a free data retrieval call binding the contract method 0xf9b0b5b9.
@@ -201,12 +214,17 @@ func (_Oracle *OracleCallerSession) ConsensusThreshold() (*big.Int, error) {
 //
 // Solidity: function cosmosBridge() view returns(address)
 func (_Oracle *OracleCaller) CosmosBridge(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "cosmosBridge")
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "cosmosBridge")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // CosmosBridge is a free data retrieval call binding the contract method 0xb0e9ef71.
@@ -227,12 +245,17 @@ func (_Oracle *OracleCallerSession) CosmosBridge() (common.Address, error) {
 //
 // Solidity: function currentValsetVersion() view returns(uint256)
 func (_Oracle *OracleCaller) CurrentValsetVersion(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "currentValsetVersion")
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "currentValsetVersion")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // CurrentValsetVersion is a free data retrieval call binding the contract method 0x8d56c37d.
@@ -253,12 +276,17 @@ func (_Oracle *OracleCallerSession) CurrentValsetVersion() (*big.Int, error) {
 //
 // Solidity: function getProphecyStatus(uint256 signedPower) view returns(bool)
 func (_Oracle *OracleCaller) GetProphecyStatus(opts *bind.CallOpts, signedPower *big.Int) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "getProphecyStatus", signedPower)
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "getProphecyStatus", signedPower)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
 // GetProphecyStatus is a free data retrieval call binding the contract method 0x77491c75.
@@ -279,12 +307,17 @@ func (_Oracle *OracleCallerSession) GetProphecyStatus(signedPower *big.Int) (boo
 //
 // Solidity: function getValidatorPower(address _validatorAddress) view returns(uint256)
 func (_Oracle *OracleCaller) GetValidatorPower(opts *bind.CallOpts, _validatorAddress common.Address) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "getValidatorPower", _validatorAddress)
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "getValidatorPower", _validatorAddress)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // GetValidatorPower is a free data retrieval call binding the contract method 0x473691a4.
@@ -301,42 +334,21 @@ func (_Oracle *OracleCallerSession) GetValidatorPower(_validatorAddress common.A
 	return _Oracle.Contract.GetValidatorPower(&_Oracle.CallOpts, _validatorAddress)
 }
 
-// HasMadeClaim is a free data retrieval call binding the contract method 0xa219763e.
-//
-// Solidity: function hasMadeClaim(uint256 , address ) view returns(bool)
-func (_Oracle *OracleCaller) HasMadeClaim(opts *bind.CallOpts, arg0 *big.Int, arg1 common.Address) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "hasMadeClaim", arg0, arg1)
-	return *ret0, err
-}
-
-// HasMadeClaim is a free data retrieval call binding the contract method 0xa219763e.
-//
-// Solidity: function hasMadeClaim(uint256 , address ) view returns(bool)
-func (_Oracle *OracleSession) HasMadeClaim(arg0 *big.Int, arg1 common.Address) (bool, error) {
-	return _Oracle.Contract.HasMadeClaim(&_Oracle.CallOpts, arg0, arg1)
-}
-
-// HasMadeClaim is a free data retrieval call binding the contract method 0xa219763e.
-//
-// Solidity: function hasMadeClaim(uint256 , address ) view returns(bool)
-func (_Oracle *OracleCallerSession) HasMadeClaim(arg0 *big.Int, arg1 common.Address) (bool, error) {
-	return _Oracle.Contract.HasMadeClaim(&_Oracle.CallOpts, arg0, arg1)
-}
-
 // IsActiveValidator is a free data retrieval call binding the contract method 0x40550a1c.
 //
 // Solidity: function isActiveValidator(address _validatorAddress) view returns(bool)
 func (_Oracle *OracleCaller) IsActiveValidator(opts *bind.CallOpts, _validatorAddress common.Address) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "isActiveValidator", _validatorAddress)
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "isActiveValidator", _validatorAddress)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
 // IsActiveValidator is a free data retrieval call binding the contract method 0x40550a1c.
@@ -353,42 +365,21 @@ func (_Oracle *OracleCallerSession) IsActiveValidator(_validatorAddress common.A
 	return _Oracle.Contract.IsActiveValidator(&_Oracle.CallOpts, _validatorAddress)
 }
 
-// LastNonceSubmitted is a free data retrieval call binding the contract method 0x457c1288.
-//
-// Solidity: function lastNonceSubmitted() view returns(uint256)
-func (_Oracle *OracleCaller) LastNonceSubmitted(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "lastNonceSubmitted")
-	return *ret0, err
-}
-
-// LastNonceSubmitted is a free data retrieval call binding the contract method 0x457c1288.
-//
-// Solidity: function lastNonceSubmitted() view returns(uint256)
-func (_Oracle *OracleSession) LastNonceSubmitted() (*big.Int, error) {
-	return _Oracle.Contract.LastNonceSubmitted(&_Oracle.CallOpts)
-}
-
-// LastNonceSubmitted is a free data retrieval call binding the contract method 0x457c1288.
-//
-// Solidity: function lastNonceSubmitted() view returns(uint256)
-func (_Oracle *OracleCallerSession) LastNonceSubmitted() (*big.Int, error) {
-	return _Oracle.Contract.LastNonceSubmitted(&_Oracle.CallOpts)
-}
-
 // Operator is a free data retrieval call binding the contract method 0x570ca735.
 //
 // Solidity: function operator() view returns(address)
 func (_Oracle *OracleCaller) Operator(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "operator")
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "operator")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // Operator is a free data retrieval call binding the contract method 0x570ca735.
@@ -405,42 +396,21 @@ func (_Oracle *OracleCallerSession) Operator() (common.Address, error) {
 	return _Oracle.Contract.Operator(&_Oracle.CallOpts)
 }
 
-// OracleClaimValidators is a free data retrieval call binding the contract method 0x78ffb1c6.
-//
-// Solidity: function oracleClaimValidators(uint256 ) view returns(uint256)
-func (_Oracle *OracleCaller) OracleClaimValidators(opts *bind.CallOpts, arg0 *big.Int) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "oracleClaimValidators", arg0)
-	return *ret0, err
-}
-
-// OracleClaimValidators is a free data retrieval call binding the contract method 0x78ffb1c6.
-//
-// Solidity: function oracleClaimValidators(uint256 ) view returns(uint256)
-func (_Oracle *OracleSession) OracleClaimValidators(arg0 *big.Int) (*big.Int, error) {
-	return _Oracle.Contract.OracleClaimValidators(&_Oracle.CallOpts, arg0)
-}
-
-// OracleClaimValidators is a free data retrieval call binding the contract method 0x78ffb1c6.
-//
-// Solidity: function oracleClaimValidators(uint256 ) view returns(uint256)
-func (_Oracle *OracleCallerSession) OracleClaimValidators(arg0 *big.Int) (*big.Int, error) {
-	return _Oracle.Contract.OracleClaimValidators(&_Oracle.CallOpts, arg0)
-}
-
 // Powers is a free data retrieval call binding the contract method 0x850f43dd.
 //
 // Solidity: function powers(address , uint256 ) view returns(uint256)
 func (_Oracle *OracleCaller) Powers(opts *bind.CallOpts, arg0 common.Address, arg1 *big.Int) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "powers", arg0, arg1)
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "powers", arg0, arg1)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // Powers is a free data retrieval call binding the contract method 0x850f43dd.
@@ -457,42 +427,21 @@ func (_Oracle *OracleCallerSession) Powers(arg0 common.Address, arg1 *big.Int) (
 	return _Oracle.Contract.Powers(&_Oracle.CallOpts, arg0, arg1)
 }
 
-// ProphecyRedeemed is a free data retrieval call binding the contract method 0x04e12aa5.
-//
-// Solidity: function prophecyRedeemed(uint256 ) view returns(bool)
-func (_Oracle *OracleCaller) ProphecyRedeemed(opts *bind.CallOpts, arg0 *big.Int) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "prophecyRedeemed", arg0)
-	return *ret0, err
-}
-
-// ProphecyRedeemed is a free data retrieval call binding the contract method 0x04e12aa5.
-//
-// Solidity: function prophecyRedeemed(uint256 ) view returns(bool)
-func (_Oracle *OracleSession) ProphecyRedeemed(arg0 *big.Int) (bool, error) {
-	return _Oracle.Contract.ProphecyRedeemed(&_Oracle.CallOpts, arg0)
-}
-
-// ProphecyRedeemed is a free data retrieval call binding the contract method 0x04e12aa5.
-//
-// Solidity: function prophecyRedeemed(uint256 ) view returns(bool)
-func (_Oracle *OracleCallerSession) ProphecyRedeemed(arg0 *big.Int) (bool, error) {
-	return _Oracle.Contract.ProphecyRedeemed(&_Oracle.CallOpts, arg0)
-}
-
 // TotalPower is a free data retrieval call binding the contract method 0xdb3ad22c.
 //
 // Solidity: function totalPower() view returns(uint256)
 func (_Oracle *OracleCaller) TotalPower(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "totalPower")
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "totalPower")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // TotalPower is a free data retrieval call binding the contract method 0xdb3ad22c.
@@ -513,12 +462,17 @@ func (_Oracle *OracleCallerSession) TotalPower() (*big.Int, error) {
 //
 // Solidity: function validatorCount() view returns(uint256)
 func (_Oracle *OracleCaller) ValidatorCount(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "validatorCount")
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "validatorCount")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // ValidatorCount is a free data retrieval call binding the contract method 0x0f43a677.
@@ -539,12 +493,17 @@ func (_Oracle *OracleCallerSession) ValidatorCount() (*big.Int, error) {
 //
 // Solidity: function validators(address , uint256 ) view returns(bool)
 func (_Oracle *OracleCaller) Validators(opts *bind.CallOpts, arg0 common.Address, arg1 *big.Int) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _Oracle.contract.Call(opts, out, "validators", arg0, arg1)
-	return *ret0, err
+	var out []interface{}
+	err := _Oracle.contract.Call(opts, &out, "validators", arg0, arg1)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
 // Validators is a free data retrieval call binding the contract method 0x45aaf18c.
@@ -797,6 +756,7 @@ func (_Oracle *OracleFilterer) ParseLogNewOracleClaim(log types.Log) (*OracleLog
 	if err := _Oracle.contract.UnpackLog(event, "LogNewOracleClaim", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -933,6 +893,7 @@ func (_Oracle *OracleFilterer) ParseLogProphecyProcessed(log types.Log) (*Oracle
 	if err := _Oracle.contract.UnpackLog(event, "LogProphecyProcessed", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1070,6 +1031,7 @@ func (_Oracle *OracleFilterer) ParseLogValidatorAdded(log types.Log) (*OracleLog
 	if err := _Oracle.contract.UnpackLog(event, "LogValidatorAdded", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1207,6 +1169,7 @@ func (_Oracle *OracleFilterer) ParseLogValidatorPowerUpdated(log types.Log) (*Or
 	if err := _Oracle.contract.UnpackLog(event, "LogValidatorPowerUpdated", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1344,6 +1307,7 @@ func (_Oracle *OracleFilterer) ParseLogValidatorRemoved(log types.Log) (*OracleL
 	if err := _Oracle.contract.UnpackLog(event, "LogValidatorRemoved", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1479,6 +1443,7 @@ func (_Oracle *OracleFilterer) ParseLogValsetReset(log types.Log) (*OracleLogVal
 	if err := _Oracle.contract.UnpackLog(event, "LogValsetReset", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1614,5 +1579,6 @@ func (_Oracle *OracleFilterer) ParseLogValsetUpdated(log types.Log) (*OracleLogV
 	if err := _Oracle.contract.UnpackLog(event, "LogValsetUpdated", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }

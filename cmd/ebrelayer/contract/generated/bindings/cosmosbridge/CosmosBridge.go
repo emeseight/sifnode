@@ -4,6 +4,7 @@
 package CosmosBridge
 
 import (
+	"errors"
 	"math/big"
 	"strings"
 
@@ -17,6 +18,7 @@ import (
 
 // Reference imports to suppress errors if they are not otherwise used.
 var (
+	_ = errors.New
 	_ = big.NewInt
 	_ = strings.NewReader
 	_ = ethereum.NotFound
@@ -33,12 +35,13 @@ type CosmosBridgeClaimData struct {
 	EthereumReceiver     common.Address
 	TokenAddress         common.Address
 	Amount               *big.Int
-	DoublePeg            bool
-	Nonce                *big.Int
-	NetworkDescriptor    *big.Int
 	TokenName            string
 	TokenSymbol          string
 	TokenDecimals        uint8
+	NetworkDescriptor    int32
+	DoublePeg            bool
+	Nonce                *big.Int
+	CosmosDenom          string
 }
 
 // CosmosBridgeSignatureData is an auto generated low-level Go binding around an user-defined struct.
@@ -49,8 +52,14 @@ type CosmosBridgeSignatureData struct {
 	S      [32]byte
 }
 
+// CosmosBridgeMetaData contains all meta data concerning the CosmosBridge contract.
+var CosmosBridgeMetaData = &bind.MetaData{
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"bridgeBank\",\"type\":\"address\"}],\"name\":\"LogBridgeBankSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"decimals\",\"type\":\"uint8\"},{\"indexed\":true,\"internalType\":\"int32\",\"name\":\"_networkDescriptor\",\"type\":\"int32\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"symbol\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sourceContractAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"bridgeTokenAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"cosmosDenom\",\"type\":\"string\"}],\"name\":\"LogNewBridgeTokenCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"LogNewOracleClaim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"prophecyID\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"LogNewProphecyClaim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"name\":\"LogProphecyCompleted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerCurrent\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerThreshold\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"}],\"name\":\"LogProphecyProcessed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorPowerUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetReset\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_validatorPower\",\"type\":\"uint256\"}],\"name\":\"addValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"sigs\",\"type\":\"bytes32[]\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"cosmosSender\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"cosmosSenderSequence\",\"type\":\"uint256\"},{\"internalType\":\"addresspayable\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"tokenName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"tokenSymbol\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"tokenDecimals\",\"type\":\"uint8\"},{\"internalType\":\"int32\",\"name\":\"networkDescriptor\",\"type\":\"int32\"},{\"internalType\":\"bool\",\"name\":\"doublePeg\",\"type\":\"bool\"},{\"internalType\":\"uint128\",\"name\":\"nonce\",\"type\":\"uint128\"},{\"internalType\":\"string\",\"name\":\"cosmosDenom\",\"type\":\"string\"}],\"internalType\":\"structCosmosBridge.ClaimData[]\",\"name\":\"claims\",\"type\":\"tuple[]\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"_v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"_r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_s\",\"type\":\"bytes32\"}],\"internalType\":\"structCosmosBridge.SignatureData[][]\",\"name\":\"signatureData\",\"type\":\"tuple[][]\"}],\"name\":\"batchSubmitProphecyClaimAggregatedSigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"bridgeBank\",\"outputs\":[{\"internalType\":\"addresspayable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newOperator\",\"type\":\"address\"}],\"name\":\"changeOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"consensusThreshold\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cosmosBridge\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currentValsetVersion\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"cosmosSender\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"cosmosSenderSequence\",\"type\":\"uint256\"},{\"internalType\":\"addresspayable\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"tokenName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"tokenSymbol\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"tokenDecimals\",\"type\":\"uint8\"},{\"internalType\":\"int32\",\"name\":\"_networkDescriptor\",\"type\":\"int32\"},{\"internalType\":\"bool\",\"name\":\"doublePeg\",\"type\":\"bool\"},{\"internalType\":\"uint128\",\"name\":\"nonce\",\"type\":\"uint128\"},{\"internalType\":\"string\",\"name\":\"cosmosDenom\",\"type\":\"string\"}],\"name\":\"getProphecyID\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"signedPower\",\"type\":\"uint256\"}],\"name\":\"getProphecyStatus\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"getValidatorPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"hasBridgeBank\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_operator\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_consensusThreshold\",\"type\":\"uint256\"},{\"internalType\":\"address[]\",\"name\":\"_initValidators\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_initPowers\",\"type\":\"uint256[]\"},{\"internalType\":\"int32\",\"name\":\"_networkDescriptor\",\"type\":\"int32\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"isActiveValidator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastNonceSubmitted\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"networkDescriptor\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"operator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"powers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_valsetVersion\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"recoverGas\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"removeValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"addresspayable\",\"name\":\"_bridgeBank\",\"type\":\"address\"}],\"name\":\"setBridgeBank\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"sourceAddressToDestinationAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"hashDigest\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"cosmosSender\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"cosmosSenderSequence\",\"type\":\"uint256\"},{\"internalType\":\"addresspayable\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"tokenName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"tokenSymbol\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"tokenDecimals\",\"type\":\"uint8\"},{\"internalType\":\"int32\",\"name\":\"networkDescriptor\",\"type\":\"int32\"},{\"internalType\":\"bool\",\"name\":\"doublePeg\",\"type\":\"bool\"},{\"internalType\":\"uint128\",\"name\":\"nonce\",\"type\":\"uint128\"},{\"internalType\":\"string\",\"name\":\"cosmosDenom\",\"type\":\"string\"}],\"internalType\":\"structCosmosBridge.ClaimData\",\"name\":\"claimData\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"_v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"_r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_s\",\"type\":\"bytes32\"}],\"internalType\":\"structCosmosBridge.SignatureData[]\",\"name\":\"signatureData\",\"type\":\"tuple[]\"}],\"name\":\"submitProphecyClaimAggregatedSigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_newValidatorPower\",\"type\":\"uint256\"}],\"name\":\"updateValidatorPower\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_validators\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_powers\",\"type\":\"uint256[]\"}],\"name\":\"updateValset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"validatorCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"validators\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+}
+
 // CosmosBridgeABI is the input ABI used to generate the binding from.
-const CosmosBridgeABI = "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"bridgeBank\",\"type\":\"address\"}],\"name\":\"LogBridgeBankSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"decimals\",\"type\":\"uint8\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"sourcechainId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"symbol\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sourceContractAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"bridgeTokenAddress\",\"type\":\"address\"}],\"name\":\"LogNewBridgeTokenCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"LogNewOracleClaim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"prophecyID\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"LogNewProphecyClaim\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"name\":\"LogProphecyCompleted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyID\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerCurrent\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_prophecyPowerThreshold\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"}],\"name\":\"LogProphecyProcessed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorPowerUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_validator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_power\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_currentValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValidatorRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetReset\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_newValsetVersion\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_validatorCount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_totalPower\",\"type\":\"uint256\"}],\"name\":\"LogValsetUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_validatorPower\",\"type\":\"uint256\"}],\"name\":\"addValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"sigs\",\"type\":\"bytes32[]\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"cosmosSender\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"cosmosSenderSequence\",\"type\":\"uint256\"},{\"internalType\":\"addresspayable\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"doublePeg\",\"type\":\"bool\"},{\"internalType\":\"uint128\",\"name\":\"nonce\",\"type\":\"uint128\"},{\"internalType\":\"uint256\",\"name\":\"networkDescriptor\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"tokenName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"tokenSymbol\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"tokenDecimals\",\"type\":\"uint8\"}],\"internalType\":\"structCosmosBridge.ClaimData[]\",\"name\":\"claims\",\"type\":\"tuple[]\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"_v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"_r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_s\",\"type\":\"bytes32\"}],\"internalType\":\"structCosmosBridge.SignatureData[][]\",\"name\":\"signatureData\",\"type\":\"tuple[][]\"}],\"name\":\"batchSubmitProphecyClaimAggregatedSigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"bridgeBank\",\"outputs\":[{\"internalType\":\"addresspayable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newOperator\",\"type\":\"address\"}],\"name\":\"changeOperator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"consensusThreshold\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cosmosBridge\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currentValsetVersion\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"_v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"_r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_s\",\"type\":\"bytes32\"}],\"internalType\":\"structCosmosBridge.SignatureData[]\",\"name\":\"_validators\",\"type\":\"tuple[]\"}],\"name\":\"findDup\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"cosmosSender\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"cosmosSenderSequence\",\"type\":\"uint256\"},{\"internalType\":\"addresspayable\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"doublePeg\",\"type\":\"bool\"},{\"internalType\":\"uint128\",\"name\":\"nonce\",\"type\":\"uint128\"},{\"internalType\":\"uint256\",\"name\":\"_networkDescriptor\",\"type\":\"uint256\"}],\"name\":\"getProphecyID\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"signedPower\",\"type\":\"uint256\"}],\"name\":\"getProphecyStatus\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"_v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"_r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_s\",\"type\":\"bytes32\"}],\"internalType\":\"structCosmosBridge.SignatureData[]\",\"name\":\"_validators\",\"type\":\"tuple[]\"}],\"name\":\"getSignedPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"getValidatorPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"hasBridgeBank\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"hasMadeClaim\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_operator\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_consensusThreshold\",\"type\":\"uint256\"},{\"internalType\":\"address[]\",\"name\":\"_initValidators\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_initPowers\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256\",\"name\":\"_networkDescriptor\",\"type\":\"uint256\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"isActiveValidator\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastNonceSubmitted\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"networkDescriptor\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"operator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"oracle\",\"outputs\":[{\"internalType\":\"addresspayable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"oracleClaimValidators\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"powers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"prophecyClaims\",\"outputs\":[{\"internalType\":\"addresspayable\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"symbol\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"prophecyRedeemed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_valsetVersion\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"recoverGas\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"}],\"name\":\"removeValidator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"addresspayable\",\"name\":\"_bridgeBank\",\"type\":\"address\"}],\"name\":\"setBridgeBank\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"sourceAddressToDestinationAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"hashDigest\",\"type\":\"bytes32\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"cosmosSender\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"cosmosSenderSequence\",\"type\":\"uint256\"},{\"internalType\":\"addresspayable\",\"name\":\"ethereumReceiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"doublePeg\",\"type\":\"bool\"},{\"internalType\":\"uint128\",\"name\":\"nonce\",\"type\":\"uint128\"},{\"internalType\":\"uint256\",\"name\":\"networkDescriptor\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"tokenName\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"tokenSymbol\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"tokenDecimals\",\"type\":\"uint8\"}],\"internalType\":\"structCosmosBridge.ClaimData\",\"name\":\"claimData\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"uint8\",\"name\":\"_v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"_r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_s\",\"type\":\"bytes32\"}],\"internalType\":\"structCosmosBridge.SignatureData[]\",\"name\":\"signatureData\",\"type\":\"tuple[]\"}],\"name\":\"submitProphecyClaimAggregatedSigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalPower\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_validatorAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_newValidatorPower\",\"type\":\"uint256\"}],\"name\":\"updateValidatorPower\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"_validators\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_powers\",\"type\":\"uint256[]\"}],\"name\":\"updateValset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"validatorCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"validators\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"valset\",\"outputs\":[{\"internalType\":\"addresspayable\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]"
+// Deprecated: Use CosmosBridgeMetaData.ABI instead.
+var CosmosBridgeABI = CosmosBridgeMetaData.ABI
 
 // CosmosBridge is an auto generated Go binding around an Ethereum contract.
 type CosmosBridge struct {
@@ -160,7 +169,7 @@ func bindCosmosBridge(address common.Address, caller bind.ContractCaller, transa
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_CosmosBridge *CosmosBridgeRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_CosmosBridge *CosmosBridgeRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _CosmosBridge.Contract.CosmosBridgeCaller.contract.Call(opts, result, method, params...)
 }
 
@@ -179,7 +188,7 @@ func (_CosmosBridge *CosmosBridgeRaw) Transact(opts *bind.TransactOpts, method s
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_CosmosBridge *CosmosBridgeCallerRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_CosmosBridge *CosmosBridgeCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _CosmosBridge.Contract.contract.Call(opts, result, method, params...)
 }
 
@@ -198,12 +207,17 @@ func (_CosmosBridge *CosmosBridgeTransactorRaw) Transact(opts *bind.TransactOpts
 //
 // Solidity: function bridgeBank() view returns(address)
 func (_CosmosBridge *CosmosBridgeCaller) BridgeBank(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "bridgeBank")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "bridgeBank")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // BridgeBank is a free data retrieval call binding the contract method 0x0e41f373.
@@ -224,12 +238,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) BridgeBank() (common.Address, er
 //
 // Solidity: function consensusThreshold() view returns(uint256)
 func (_CosmosBridge *CosmosBridgeCaller) ConsensusThreshold(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "consensusThreshold")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "consensusThreshold")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // ConsensusThreshold is a free data retrieval call binding the contract method 0xf9b0b5b9.
@@ -250,12 +269,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) ConsensusThreshold() (*big.Int, 
 //
 // Solidity: function cosmosBridge() view returns(address)
 func (_CosmosBridge *CosmosBridgeCaller) CosmosBridge(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "cosmosBridge")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "cosmosBridge")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // CosmosBridge is a free data retrieval call binding the contract method 0xb0e9ef71.
@@ -276,12 +300,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) CosmosBridge() (common.Address, 
 //
 // Solidity: function currentValsetVersion() view returns(uint256)
 func (_CosmosBridge *CosmosBridgeCaller) CurrentValsetVersion(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "currentValsetVersion")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "currentValsetVersion")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // CurrentValsetVersion is a free data retrieval call binding the contract method 0x8d56c37d.
@@ -298,68 +327,52 @@ func (_CosmosBridge *CosmosBridgeCallerSession) CurrentValsetVersion() (*big.Int
 	return _CosmosBridge.Contract.CurrentValsetVersion(&_CosmosBridge.CallOpts)
 }
 
-// FindDup is a free data retrieval call binding the contract method 0x48426c99.
+// GetProphecyID is a free data retrieval call binding the contract method 0x257266a8.
 //
-// Solidity: function findDup((address,uint8,bytes32,bytes32)[] _validators) pure returns(bool)
-func (_CosmosBridge *CosmosBridgeCaller) FindDup(opts *bind.CallOpts, _validators []CosmosBridgeSignatureData) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "findDup", _validators)
-	return *ret0, err
+// Solidity: function getProphecyID(bytes cosmosSender, uint256 cosmosSenderSequence, address ethereumReceiver, address tokenAddress, uint256 amount, string tokenName, string tokenSymbol, uint8 tokenDecimals, int32 _networkDescriptor, bool doublePeg, uint128 nonce, string cosmosDenom) pure returns(uint256)
+func (_CosmosBridge *CosmosBridgeCaller) GetProphecyID(opts *bind.CallOpts, cosmosSender []byte, cosmosSenderSequence *big.Int, ethereumReceiver common.Address, tokenAddress common.Address, amount *big.Int, tokenName string, tokenSymbol string, tokenDecimals uint8, _networkDescriptor int32, doublePeg bool, nonce *big.Int, cosmosDenom string) (*big.Int, error) {
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "getProphecyID", cosmosSender, cosmosSenderSequence, ethereumReceiver, tokenAddress, amount, tokenName, tokenSymbol, tokenDecimals, _networkDescriptor, doublePeg, nonce, cosmosDenom)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
-// FindDup is a free data retrieval call binding the contract method 0x48426c99.
+// GetProphecyID is a free data retrieval call binding the contract method 0x257266a8.
 //
-// Solidity: function findDup((address,uint8,bytes32,bytes32)[] _validators) pure returns(bool)
-func (_CosmosBridge *CosmosBridgeSession) FindDup(_validators []CosmosBridgeSignatureData) (bool, error) {
-	return _CosmosBridge.Contract.FindDup(&_CosmosBridge.CallOpts, _validators)
+// Solidity: function getProphecyID(bytes cosmosSender, uint256 cosmosSenderSequence, address ethereumReceiver, address tokenAddress, uint256 amount, string tokenName, string tokenSymbol, uint8 tokenDecimals, int32 _networkDescriptor, bool doublePeg, uint128 nonce, string cosmosDenom) pure returns(uint256)
+func (_CosmosBridge *CosmosBridgeSession) GetProphecyID(cosmosSender []byte, cosmosSenderSequence *big.Int, ethereumReceiver common.Address, tokenAddress common.Address, amount *big.Int, tokenName string, tokenSymbol string, tokenDecimals uint8, _networkDescriptor int32, doublePeg bool, nonce *big.Int, cosmosDenom string) (*big.Int, error) {
+	return _CosmosBridge.Contract.GetProphecyID(&_CosmosBridge.CallOpts, cosmosSender, cosmosSenderSequence, ethereumReceiver, tokenAddress, amount, tokenName, tokenSymbol, tokenDecimals, _networkDescriptor, doublePeg, nonce, cosmosDenom)
 }
 
-// FindDup is a free data retrieval call binding the contract method 0x48426c99.
+// GetProphecyID is a free data retrieval call binding the contract method 0x257266a8.
 //
-// Solidity: function findDup((address,uint8,bytes32,bytes32)[] _validators) pure returns(bool)
-func (_CosmosBridge *CosmosBridgeCallerSession) FindDup(_validators []CosmosBridgeSignatureData) (bool, error) {
-	return _CosmosBridge.Contract.FindDup(&_CosmosBridge.CallOpts, _validators)
-}
-
-// GetProphecyID is a free data retrieval call binding the contract method 0x2804ed2e.
-//
-// Solidity: function getProphecyID(bytes cosmosSender, uint256 cosmosSenderSequence, address ethereumReceiver, address tokenAddress, uint256 amount, bool doublePeg, uint128 nonce, uint256 _networkDescriptor) pure returns(uint256)
-func (_CosmosBridge *CosmosBridgeCaller) GetProphecyID(opts *bind.CallOpts, cosmosSender []byte, cosmosSenderSequence *big.Int, ethereumReceiver common.Address, tokenAddress common.Address, amount *big.Int, doublePeg bool, nonce *big.Int, _networkDescriptor *big.Int) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "getProphecyID", cosmosSender, cosmosSenderSequence, ethereumReceiver, tokenAddress, amount, doublePeg, nonce, _networkDescriptor)
-	return *ret0, err
-}
-
-// GetProphecyID is a free data retrieval call binding the contract method 0x2804ed2e.
-//
-// Solidity: function getProphecyID(bytes cosmosSender, uint256 cosmosSenderSequence, address ethereumReceiver, address tokenAddress, uint256 amount, bool doublePeg, uint128 nonce, uint256 _networkDescriptor) pure returns(uint256)
-func (_CosmosBridge *CosmosBridgeSession) GetProphecyID(cosmosSender []byte, cosmosSenderSequence *big.Int, ethereumReceiver common.Address, tokenAddress common.Address, amount *big.Int, doublePeg bool, nonce *big.Int, _networkDescriptor *big.Int) (*big.Int, error) {
-	return _CosmosBridge.Contract.GetProphecyID(&_CosmosBridge.CallOpts, cosmosSender, cosmosSenderSequence, ethereumReceiver, tokenAddress, amount, doublePeg, nonce, _networkDescriptor)
-}
-
-// GetProphecyID is a free data retrieval call binding the contract method 0x2804ed2e.
-//
-// Solidity: function getProphecyID(bytes cosmosSender, uint256 cosmosSenderSequence, address ethereumReceiver, address tokenAddress, uint256 amount, bool doublePeg, uint128 nonce, uint256 _networkDescriptor) pure returns(uint256)
-func (_CosmosBridge *CosmosBridgeCallerSession) GetProphecyID(cosmosSender []byte, cosmosSenderSequence *big.Int, ethereumReceiver common.Address, tokenAddress common.Address, amount *big.Int, doublePeg bool, nonce *big.Int, _networkDescriptor *big.Int) (*big.Int, error) {
-	return _CosmosBridge.Contract.GetProphecyID(&_CosmosBridge.CallOpts, cosmosSender, cosmosSenderSequence, ethereumReceiver, tokenAddress, amount, doublePeg, nonce, _networkDescriptor)
+// Solidity: function getProphecyID(bytes cosmosSender, uint256 cosmosSenderSequence, address ethereumReceiver, address tokenAddress, uint256 amount, string tokenName, string tokenSymbol, uint8 tokenDecimals, int32 _networkDescriptor, bool doublePeg, uint128 nonce, string cosmosDenom) pure returns(uint256)
+func (_CosmosBridge *CosmosBridgeCallerSession) GetProphecyID(cosmosSender []byte, cosmosSenderSequence *big.Int, ethereumReceiver common.Address, tokenAddress common.Address, amount *big.Int, tokenName string, tokenSymbol string, tokenDecimals uint8, _networkDescriptor int32, doublePeg bool, nonce *big.Int, cosmosDenom string) (*big.Int, error) {
+	return _CosmosBridge.Contract.GetProphecyID(&_CosmosBridge.CallOpts, cosmosSender, cosmosSenderSequence, ethereumReceiver, tokenAddress, amount, tokenName, tokenSymbol, tokenDecimals, _networkDescriptor, doublePeg, nonce, cosmosDenom)
 }
 
 // GetProphecyStatus is a free data retrieval call binding the contract method 0x77491c75.
 //
 // Solidity: function getProphecyStatus(uint256 signedPower) view returns(bool)
 func (_CosmosBridge *CosmosBridgeCaller) GetProphecyStatus(opts *bind.CallOpts, signedPower *big.Int) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "getProphecyStatus", signedPower)
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "getProphecyStatus", signedPower)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
 // GetProphecyStatus is a free data retrieval call binding the contract method 0x77491c75.
@@ -376,42 +389,21 @@ func (_CosmosBridge *CosmosBridgeCallerSession) GetProphecyStatus(signedPower *b
 	return _CosmosBridge.Contract.GetProphecyStatus(&_CosmosBridge.CallOpts, signedPower)
 }
 
-// GetSignedPower is a free data retrieval call binding the contract method 0x3561516d.
-//
-// Solidity: function getSignedPower((address,uint8,bytes32,bytes32)[] _validators) view returns(uint256)
-func (_CosmosBridge *CosmosBridgeCaller) GetSignedPower(opts *bind.CallOpts, _validators []CosmosBridgeSignatureData) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "getSignedPower", _validators)
-	return *ret0, err
-}
-
-// GetSignedPower is a free data retrieval call binding the contract method 0x3561516d.
-//
-// Solidity: function getSignedPower((address,uint8,bytes32,bytes32)[] _validators) view returns(uint256)
-func (_CosmosBridge *CosmosBridgeSession) GetSignedPower(_validators []CosmosBridgeSignatureData) (*big.Int, error) {
-	return _CosmosBridge.Contract.GetSignedPower(&_CosmosBridge.CallOpts, _validators)
-}
-
-// GetSignedPower is a free data retrieval call binding the contract method 0x3561516d.
-//
-// Solidity: function getSignedPower((address,uint8,bytes32,bytes32)[] _validators) view returns(uint256)
-func (_CosmosBridge *CosmosBridgeCallerSession) GetSignedPower(_validators []CosmosBridgeSignatureData) (*big.Int, error) {
-	return _CosmosBridge.Contract.GetSignedPower(&_CosmosBridge.CallOpts, _validators)
-}
-
 // GetValidatorPower is a free data retrieval call binding the contract method 0x473691a4.
 //
 // Solidity: function getValidatorPower(address _validatorAddress) view returns(uint256)
 func (_CosmosBridge *CosmosBridgeCaller) GetValidatorPower(opts *bind.CallOpts, _validatorAddress common.Address) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "getValidatorPower", _validatorAddress)
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "getValidatorPower", _validatorAddress)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // GetValidatorPower is a free data retrieval call binding the contract method 0x473691a4.
@@ -432,12 +424,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) GetValidatorPower(_validatorAddr
 //
 // Solidity: function hasBridgeBank() view returns(bool)
 func (_CosmosBridge *CosmosBridgeCaller) HasBridgeBank(opts *bind.CallOpts) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "hasBridgeBank")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "hasBridgeBank")
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
 // HasBridgeBank is a free data retrieval call binding the contract method 0x69294a4e.
@@ -454,42 +451,21 @@ func (_CosmosBridge *CosmosBridgeCallerSession) HasBridgeBank() (bool, error) {
 	return _CosmosBridge.Contract.HasBridgeBank(&_CosmosBridge.CallOpts)
 }
 
-// HasMadeClaim is a free data retrieval call binding the contract method 0xa219763e.
-//
-// Solidity: function hasMadeClaim(uint256 , address ) view returns(bool)
-func (_CosmosBridge *CosmosBridgeCaller) HasMadeClaim(opts *bind.CallOpts, arg0 *big.Int, arg1 common.Address) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "hasMadeClaim", arg0, arg1)
-	return *ret0, err
-}
-
-// HasMadeClaim is a free data retrieval call binding the contract method 0xa219763e.
-//
-// Solidity: function hasMadeClaim(uint256 , address ) view returns(bool)
-func (_CosmosBridge *CosmosBridgeSession) HasMadeClaim(arg0 *big.Int, arg1 common.Address) (bool, error) {
-	return _CosmosBridge.Contract.HasMadeClaim(&_CosmosBridge.CallOpts, arg0, arg1)
-}
-
-// HasMadeClaim is a free data retrieval call binding the contract method 0xa219763e.
-//
-// Solidity: function hasMadeClaim(uint256 , address ) view returns(bool)
-func (_CosmosBridge *CosmosBridgeCallerSession) HasMadeClaim(arg0 *big.Int, arg1 common.Address) (bool, error) {
-	return _CosmosBridge.Contract.HasMadeClaim(&_CosmosBridge.CallOpts, arg0, arg1)
-}
-
 // IsActiveValidator is a free data retrieval call binding the contract method 0x40550a1c.
 //
 // Solidity: function isActiveValidator(address _validatorAddress) view returns(bool)
 func (_CosmosBridge *CosmosBridgeCaller) IsActiveValidator(opts *bind.CallOpts, _validatorAddress common.Address) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "isActiveValidator", _validatorAddress)
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "isActiveValidator", _validatorAddress)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
 // IsActiveValidator is a free data retrieval call binding the contract method 0x40550a1c.
@@ -510,12 +486,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) IsActiveValidator(_validatorAddr
 //
 // Solidity: function lastNonceSubmitted() view returns(uint256)
 func (_CosmosBridge *CosmosBridgeCaller) LastNonceSubmitted(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "lastNonceSubmitted")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "lastNonceSubmitted")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // LastNonceSubmitted is a free data retrieval call binding the contract method 0x457c1288.
@@ -534,27 +515,32 @@ func (_CosmosBridge *CosmosBridgeCallerSession) LastNonceSubmitted() (*big.Int, 
 
 // NetworkDescriptor is a free data retrieval call binding the contract method 0x909d4a1c.
 //
-// Solidity: function networkDescriptor() view returns(uint256)
-func (_CosmosBridge *CosmosBridgeCaller) NetworkDescriptor(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "networkDescriptor")
-	return *ret0, err
+// Solidity: function networkDescriptor() view returns(int32)
+func (_CosmosBridge *CosmosBridgeCaller) NetworkDescriptor(opts *bind.CallOpts) (int32, error) {
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "networkDescriptor")
+
+	if err != nil {
+		return *new(int32), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(int32)).(*int32)
+
+	return out0, err
+
 }
 
 // NetworkDescriptor is a free data retrieval call binding the contract method 0x909d4a1c.
 //
-// Solidity: function networkDescriptor() view returns(uint256)
-func (_CosmosBridge *CosmosBridgeSession) NetworkDescriptor() (*big.Int, error) {
+// Solidity: function networkDescriptor() view returns(int32)
+func (_CosmosBridge *CosmosBridgeSession) NetworkDescriptor() (int32, error) {
 	return _CosmosBridge.Contract.NetworkDescriptor(&_CosmosBridge.CallOpts)
 }
 
 // NetworkDescriptor is a free data retrieval call binding the contract method 0x909d4a1c.
 //
-// Solidity: function networkDescriptor() view returns(uint256)
-func (_CosmosBridge *CosmosBridgeCallerSession) NetworkDescriptor() (*big.Int, error) {
+// Solidity: function networkDescriptor() view returns(int32)
+func (_CosmosBridge *CosmosBridgeCallerSession) NetworkDescriptor() (int32, error) {
 	return _CosmosBridge.Contract.NetworkDescriptor(&_CosmosBridge.CallOpts)
 }
 
@@ -562,12 +548,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) NetworkDescriptor() (*big.Int, e
 //
 // Solidity: function operator() view returns(address)
 func (_CosmosBridge *CosmosBridgeCaller) Operator(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "operator")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "operator")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // Operator is a free data retrieval call binding the contract method 0x570ca735.
@@ -584,68 +575,21 @@ func (_CosmosBridge *CosmosBridgeCallerSession) Operator() (common.Address, erro
 	return _CosmosBridge.Contract.Operator(&_CosmosBridge.CallOpts)
 }
 
-// Oracle is a free data retrieval call binding the contract method 0x7dc0d1d0.
-//
-// Solidity: function oracle() view returns(address)
-func (_CosmosBridge *CosmosBridgeCaller) Oracle(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "oracle")
-	return *ret0, err
-}
-
-// Oracle is a free data retrieval call binding the contract method 0x7dc0d1d0.
-//
-// Solidity: function oracle() view returns(address)
-func (_CosmosBridge *CosmosBridgeSession) Oracle() (common.Address, error) {
-	return _CosmosBridge.Contract.Oracle(&_CosmosBridge.CallOpts)
-}
-
-// Oracle is a free data retrieval call binding the contract method 0x7dc0d1d0.
-//
-// Solidity: function oracle() view returns(address)
-func (_CosmosBridge *CosmosBridgeCallerSession) Oracle() (common.Address, error) {
-	return _CosmosBridge.Contract.Oracle(&_CosmosBridge.CallOpts)
-}
-
-// OracleClaimValidators is a free data retrieval call binding the contract method 0x78ffb1c6.
-//
-// Solidity: function oracleClaimValidators(uint256 ) view returns(uint256)
-func (_CosmosBridge *CosmosBridgeCaller) OracleClaimValidators(opts *bind.CallOpts, arg0 *big.Int) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "oracleClaimValidators", arg0)
-	return *ret0, err
-}
-
-// OracleClaimValidators is a free data retrieval call binding the contract method 0x78ffb1c6.
-//
-// Solidity: function oracleClaimValidators(uint256 ) view returns(uint256)
-func (_CosmosBridge *CosmosBridgeSession) OracleClaimValidators(arg0 *big.Int) (*big.Int, error) {
-	return _CosmosBridge.Contract.OracleClaimValidators(&_CosmosBridge.CallOpts, arg0)
-}
-
-// OracleClaimValidators is a free data retrieval call binding the contract method 0x78ffb1c6.
-//
-// Solidity: function oracleClaimValidators(uint256 ) view returns(uint256)
-func (_CosmosBridge *CosmosBridgeCallerSession) OracleClaimValidators(arg0 *big.Int) (*big.Int, error) {
-	return _CosmosBridge.Contract.OracleClaimValidators(&_CosmosBridge.CallOpts, arg0)
-}
-
 // Powers is a free data retrieval call binding the contract method 0x850f43dd.
 //
 // Solidity: function powers(address , uint256 ) view returns(uint256)
 func (_CosmosBridge *CosmosBridgeCaller) Powers(opts *bind.CallOpts, arg0 common.Address, arg1 *big.Int) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "powers", arg0, arg1)
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "powers", arg0, arg1)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // Powers is a free data retrieval call binding the contract method 0x850f43dd.
@@ -662,82 +606,21 @@ func (_CosmosBridge *CosmosBridgeCallerSession) Powers(arg0 common.Address, arg1
 	return _CosmosBridge.Contract.Powers(&_CosmosBridge.CallOpts, arg0, arg1)
 }
 
-// ProphecyClaims is a free data retrieval call binding the contract method 0xdb4237af.
-//
-// Solidity: function prophecyClaims(uint256 ) view returns(address ethereumReceiver, string symbol, uint256 amount)
-func (_CosmosBridge *CosmosBridgeCaller) ProphecyClaims(opts *bind.CallOpts, arg0 *big.Int) (struct {
-	EthereumReceiver common.Address
-	Symbol           string
-	Amount           *big.Int
-}, error) {
-	ret := new(struct {
-		EthereumReceiver common.Address
-		Symbol           string
-		Amount           *big.Int
-	})
-	out := ret
-	err := _CosmosBridge.contract.Call(opts, out, "prophecyClaims", arg0)
-	return *ret, err
-}
-
-// ProphecyClaims is a free data retrieval call binding the contract method 0xdb4237af.
-//
-// Solidity: function prophecyClaims(uint256 ) view returns(address ethereumReceiver, string symbol, uint256 amount)
-func (_CosmosBridge *CosmosBridgeSession) ProphecyClaims(arg0 *big.Int) (struct {
-	EthereumReceiver common.Address
-	Symbol           string
-	Amount           *big.Int
-}, error) {
-	return _CosmosBridge.Contract.ProphecyClaims(&_CosmosBridge.CallOpts, arg0)
-}
-
-// ProphecyClaims is a free data retrieval call binding the contract method 0xdb4237af.
-//
-// Solidity: function prophecyClaims(uint256 ) view returns(address ethereumReceiver, string symbol, uint256 amount)
-func (_CosmosBridge *CosmosBridgeCallerSession) ProphecyClaims(arg0 *big.Int) (struct {
-	EthereumReceiver common.Address
-	Symbol           string
-	Amount           *big.Int
-}, error) {
-	return _CosmosBridge.Contract.ProphecyClaims(&_CosmosBridge.CallOpts, arg0)
-}
-
-// ProphecyRedeemed is a free data retrieval call binding the contract method 0x04e12aa5.
-//
-// Solidity: function prophecyRedeemed(uint256 ) view returns(bool)
-func (_CosmosBridge *CosmosBridgeCaller) ProphecyRedeemed(opts *bind.CallOpts, arg0 *big.Int) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "prophecyRedeemed", arg0)
-	return *ret0, err
-}
-
-// ProphecyRedeemed is a free data retrieval call binding the contract method 0x04e12aa5.
-//
-// Solidity: function prophecyRedeemed(uint256 ) view returns(bool)
-func (_CosmosBridge *CosmosBridgeSession) ProphecyRedeemed(arg0 *big.Int) (bool, error) {
-	return _CosmosBridge.Contract.ProphecyRedeemed(&_CosmosBridge.CallOpts, arg0)
-}
-
-// ProphecyRedeemed is a free data retrieval call binding the contract method 0x04e12aa5.
-//
-// Solidity: function prophecyRedeemed(uint256 ) view returns(bool)
-func (_CosmosBridge *CosmosBridgeCallerSession) ProphecyRedeemed(arg0 *big.Int) (bool, error) {
-	return _CosmosBridge.Contract.ProphecyRedeemed(&_CosmosBridge.CallOpts, arg0)
-}
-
 // SourceAddressToDestinationAddress is a free data retrieval call binding the contract method 0x7b010263.
 //
 // Solidity: function sourceAddressToDestinationAddress(address ) view returns(address)
 func (_CosmosBridge *CosmosBridgeCaller) SourceAddressToDestinationAddress(opts *bind.CallOpts, arg0 common.Address) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "sourceAddressToDestinationAddress", arg0)
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "sourceAddressToDestinationAddress", arg0)
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
 }
 
 // SourceAddressToDestinationAddress is a free data retrieval call binding the contract method 0x7b010263.
@@ -758,12 +641,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) SourceAddressToDestinationAddres
 //
 // Solidity: function totalPower() view returns(uint256)
 func (_CosmosBridge *CosmosBridgeCaller) TotalPower(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "totalPower")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "totalPower")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // TotalPower is a free data retrieval call binding the contract method 0xdb3ad22c.
@@ -784,12 +672,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) TotalPower() (*big.Int, error) {
 //
 // Solidity: function validatorCount() view returns(uint256)
 func (_CosmosBridge *CosmosBridgeCaller) ValidatorCount(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "validatorCount")
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "validatorCount")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
 }
 
 // ValidatorCount is a free data retrieval call binding the contract method 0x0f43a677.
@@ -810,12 +703,17 @@ func (_CosmosBridge *CosmosBridgeCallerSession) ValidatorCount() (*big.Int, erro
 //
 // Solidity: function validators(address , uint256 ) view returns(bool)
 func (_CosmosBridge *CosmosBridgeCaller) Validators(opts *bind.CallOpts, arg0 common.Address, arg1 *big.Int) (bool, error) {
-	var (
-		ret0 = new(bool)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "validators", arg0, arg1)
-	return *ret0, err
+	var out []interface{}
+	err := _CosmosBridge.contract.Call(opts, &out, "validators", arg0, arg1)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
 // Validators is a free data retrieval call binding the contract method 0x45aaf18c.
@@ -830,32 +728,6 @@ func (_CosmosBridge *CosmosBridgeSession) Validators(arg0 common.Address, arg1 *
 // Solidity: function validators(address , uint256 ) view returns(bool)
 func (_CosmosBridge *CosmosBridgeCallerSession) Validators(arg0 common.Address, arg1 *big.Int) (bool, error) {
 	return _CosmosBridge.Contract.Validators(&_CosmosBridge.CallOpts, arg0, arg1)
-}
-
-// Valset is a free data retrieval call binding the contract method 0x7f54af0c.
-//
-// Solidity: function valset() view returns(address)
-func (_CosmosBridge *CosmosBridgeCaller) Valset(opts *bind.CallOpts) (common.Address, error) {
-	var (
-		ret0 = new(common.Address)
-	)
-	out := ret0
-	err := _CosmosBridge.contract.Call(opts, out, "valset")
-	return *ret0, err
-}
-
-// Valset is a free data retrieval call binding the contract method 0x7f54af0c.
-//
-// Solidity: function valset() view returns(address)
-func (_CosmosBridge *CosmosBridgeSession) Valset() (common.Address, error) {
-	return _CosmosBridge.Contract.Valset(&_CosmosBridge.CallOpts)
-}
-
-// Valset is a free data retrieval call binding the contract method 0x7f54af0c.
-//
-// Solidity: function valset() view returns(address)
-func (_CosmosBridge *CosmosBridgeCallerSession) Valset() (common.Address, error) {
-	return _CosmosBridge.Contract.Valset(&_CosmosBridge.CallOpts)
 }
 
 // AddValidator is a paid mutator transaction binding the contract method 0xfc6c1f02.
@@ -879,23 +751,23 @@ func (_CosmosBridge *CosmosBridgeTransactorSession) AddValidator(_validatorAddre
 	return _CosmosBridge.Contract.AddValidator(&_CosmosBridge.TransactOpts, _validatorAddress, _validatorPower)
 }
 
-// BatchSubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0xa782b4da.
+// BatchSubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0x5078f631.
 //
-// Solidity: function batchSubmitProphecyClaimAggregatedSigs(bytes32[] sigs, (bytes,uint256,address,address,uint256,bool,uint128,uint256,string,string,uint8)[] claims, (address,uint8,bytes32,bytes32)[][] signatureData) returns()
+// Solidity: function batchSubmitProphecyClaimAggregatedSigs(bytes32[] sigs, (bytes,uint256,address,address,uint256,string,string,uint8,int32,bool,uint128,string)[] claims, (address,uint8,bytes32,bytes32)[][] signatureData) returns()
 func (_CosmosBridge *CosmosBridgeTransactor) BatchSubmitProphecyClaimAggregatedSigs(opts *bind.TransactOpts, sigs [][32]byte, claims []CosmosBridgeClaimData, signatureData [][]CosmosBridgeSignatureData) (*types.Transaction, error) {
 	return _CosmosBridge.contract.Transact(opts, "batchSubmitProphecyClaimAggregatedSigs", sigs, claims, signatureData)
 }
 
-// BatchSubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0xa782b4da.
+// BatchSubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0x5078f631.
 //
-// Solidity: function batchSubmitProphecyClaimAggregatedSigs(bytes32[] sigs, (bytes,uint256,address,address,uint256,bool,uint128,uint256,string,string,uint8)[] claims, (address,uint8,bytes32,bytes32)[][] signatureData) returns()
+// Solidity: function batchSubmitProphecyClaimAggregatedSigs(bytes32[] sigs, (bytes,uint256,address,address,uint256,string,string,uint8,int32,bool,uint128,string)[] claims, (address,uint8,bytes32,bytes32)[][] signatureData) returns()
 func (_CosmosBridge *CosmosBridgeSession) BatchSubmitProphecyClaimAggregatedSigs(sigs [][32]byte, claims []CosmosBridgeClaimData, signatureData [][]CosmosBridgeSignatureData) (*types.Transaction, error) {
 	return _CosmosBridge.Contract.BatchSubmitProphecyClaimAggregatedSigs(&_CosmosBridge.TransactOpts, sigs, claims, signatureData)
 }
 
-// BatchSubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0xa782b4da.
+// BatchSubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0x5078f631.
 //
-// Solidity: function batchSubmitProphecyClaimAggregatedSigs(bytes32[] sigs, (bytes,uint256,address,address,uint256,bool,uint128,uint256,string,string,uint8)[] claims, (address,uint8,bytes32,bytes32)[][] signatureData) returns()
+// Solidity: function batchSubmitProphecyClaimAggregatedSigs(bytes32[] sigs, (bytes,uint256,address,address,uint256,string,string,uint8,int32,bool,uint128,string)[] claims, (address,uint8,bytes32,bytes32)[][] signatureData) returns()
 func (_CosmosBridge *CosmosBridgeTransactorSession) BatchSubmitProphecyClaimAggregatedSigs(sigs [][32]byte, claims []CosmosBridgeClaimData, signatureData [][]CosmosBridgeSignatureData) (*types.Transaction, error) {
 	return _CosmosBridge.Contract.BatchSubmitProphecyClaimAggregatedSigs(&_CosmosBridge.TransactOpts, sigs, claims, signatureData)
 }
@@ -921,24 +793,24 @@ func (_CosmosBridge *CosmosBridgeTransactorSession) ChangeOperator(_newOperator 
 	return _CosmosBridge.Contract.ChangeOperator(&_CosmosBridge.TransactOpts, _newOperator)
 }
 
-// Initialize is a paid mutator transaction binding the contract method 0xab988bb8.
+// Initialize is a paid mutator transaction binding the contract method 0xdf3ca886.
 //
-// Solidity: function initialize(address _operator, uint256 _consensusThreshold, address[] _initValidators, uint256[] _initPowers, uint256 _networkDescriptor) returns()
-func (_CosmosBridge *CosmosBridgeTransactor) Initialize(opts *bind.TransactOpts, _operator common.Address, _consensusThreshold *big.Int, _initValidators []common.Address, _initPowers []*big.Int, _networkDescriptor *big.Int) (*types.Transaction, error) {
+// Solidity: function initialize(address _operator, uint256 _consensusThreshold, address[] _initValidators, uint256[] _initPowers, int32 _networkDescriptor) returns()
+func (_CosmosBridge *CosmosBridgeTransactor) Initialize(opts *bind.TransactOpts, _operator common.Address, _consensusThreshold *big.Int, _initValidators []common.Address, _initPowers []*big.Int, _networkDescriptor int32) (*types.Transaction, error) {
 	return _CosmosBridge.contract.Transact(opts, "initialize", _operator, _consensusThreshold, _initValidators, _initPowers, _networkDescriptor)
 }
 
-// Initialize is a paid mutator transaction binding the contract method 0xab988bb8.
+// Initialize is a paid mutator transaction binding the contract method 0xdf3ca886.
 //
-// Solidity: function initialize(address _operator, uint256 _consensusThreshold, address[] _initValidators, uint256[] _initPowers, uint256 _networkDescriptor) returns()
-func (_CosmosBridge *CosmosBridgeSession) Initialize(_operator common.Address, _consensusThreshold *big.Int, _initValidators []common.Address, _initPowers []*big.Int, _networkDescriptor *big.Int) (*types.Transaction, error) {
+// Solidity: function initialize(address _operator, uint256 _consensusThreshold, address[] _initValidators, uint256[] _initPowers, int32 _networkDescriptor) returns()
+func (_CosmosBridge *CosmosBridgeSession) Initialize(_operator common.Address, _consensusThreshold *big.Int, _initValidators []common.Address, _initPowers []*big.Int, _networkDescriptor int32) (*types.Transaction, error) {
 	return _CosmosBridge.Contract.Initialize(&_CosmosBridge.TransactOpts, _operator, _consensusThreshold, _initValidators, _initPowers, _networkDescriptor)
 }
 
-// Initialize is a paid mutator transaction binding the contract method 0xab988bb8.
+// Initialize is a paid mutator transaction binding the contract method 0xdf3ca886.
 //
-// Solidity: function initialize(address _operator, uint256 _consensusThreshold, address[] _initValidators, uint256[] _initPowers, uint256 _networkDescriptor) returns()
-func (_CosmosBridge *CosmosBridgeTransactorSession) Initialize(_operator common.Address, _consensusThreshold *big.Int, _initValidators []common.Address, _initPowers []*big.Int, _networkDescriptor *big.Int) (*types.Transaction, error) {
+// Solidity: function initialize(address _operator, uint256 _consensusThreshold, address[] _initValidators, uint256[] _initPowers, int32 _networkDescriptor) returns()
+func (_CosmosBridge *CosmosBridgeTransactorSession) Initialize(_operator common.Address, _consensusThreshold *big.Int, _initValidators []common.Address, _initPowers []*big.Int, _networkDescriptor int32) (*types.Transaction, error) {
 	return _CosmosBridge.Contract.Initialize(&_CosmosBridge.TransactOpts, _operator, _consensusThreshold, _initValidators, _initPowers, _networkDescriptor)
 }
 
@@ -1005,23 +877,23 @@ func (_CosmosBridge *CosmosBridgeTransactorSession) SetBridgeBank(_bridgeBank co
 	return _CosmosBridge.Contract.SetBridgeBank(&_CosmosBridge.TransactOpts, _bridgeBank)
 }
 
-// SubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0xeae9b79d.
+// SubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0x72cbd7b9.
 //
-// Solidity: function submitProphecyClaimAggregatedSigs(bytes32 hashDigest, (bytes,uint256,address,address,uint256,bool,uint128,uint256,string,string,uint8) claimData, (address,uint8,bytes32,bytes32)[] signatureData) returns()
+// Solidity: function submitProphecyClaimAggregatedSigs(bytes32 hashDigest, (bytes,uint256,address,address,uint256,string,string,uint8,int32,bool,uint128,string) claimData, (address,uint8,bytes32,bytes32)[] signatureData) returns()
 func (_CosmosBridge *CosmosBridgeTransactor) SubmitProphecyClaimAggregatedSigs(opts *bind.TransactOpts, hashDigest [32]byte, claimData CosmosBridgeClaimData, signatureData []CosmosBridgeSignatureData) (*types.Transaction, error) {
 	return _CosmosBridge.contract.Transact(opts, "submitProphecyClaimAggregatedSigs", hashDigest, claimData, signatureData)
 }
 
-// SubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0xeae9b79d.
+// SubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0x72cbd7b9.
 //
-// Solidity: function submitProphecyClaimAggregatedSigs(bytes32 hashDigest, (bytes,uint256,address,address,uint256,bool,uint128,uint256,string,string,uint8) claimData, (address,uint8,bytes32,bytes32)[] signatureData) returns()
+// Solidity: function submitProphecyClaimAggregatedSigs(bytes32 hashDigest, (bytes,uint256,address,address,uint256,string,string,uint8,int32,bool,uint128,string) claimData, (address,uint8,bytes32,bytes32)[] signatureData) returns()
 func (_CosmosBridge *CosmosBridgeSession) SubmitProphecyClaimAggregatedSigs(hashDigest [32]byte, claimData CosmosBridgeClaimData, signatureData []CosmosBridgeSignatureData) (*types.Transaction, error) {
 	return _CosmosBridge.Contract.SubmitProphecyClaimAggregatedSigs(&_CosmosBridge.TransactOpts, hashDigest, claimData, signatureData)
 }
 
-// SubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0xeae9b79d.
+// SubmitProphecyClaimAggregatedSigs is a paid mutator transaction binding the contract method 0x72cbd7b9.
 //
-// Solidity: function submitProphecyClaimAggregatedSigs(bytes32 hashDigest, (bytes,uint256,address,address,uint256,bool,uint128,uint256,string,string,uint8) claimData, (address,uint8,bytes32,bytes32)[] signatureData) returns()
+// Solidity: function submitProphecyClaimAggregatedSigs(bytes32 hashDigest, (bytes,uint256,address,address,uint256,string,string,uint8,int32,bool,uint128,string) claimData, (address,uint8,bytes32,bytes32)[] signatureData) returns()
 func (_CosmosBridge *CosmosBridgeTransactorSession) SubmitProphecyClaimAggregatedSigs(hashDigest [32]byte, claimData CosmosBridgeClaimData, signatureData []CosmosBridgeSignatureData) (*types.Transaction, error) {
 	return _CosmosBridge.Contract.SubmitProphecyClaimAggregatedSigs(&_CosmosBridge.TransactOpts, hashDigest, claimData, signatureData)
 }
@@ -1198,6 +1070,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogBridgeBankSet(log types.Log) 
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogBridgeBankSet", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1271,22 +1144,23 @@ func (it *CosmosBridgeLogNewBridgeTokenCreatedIterator) Close() error {
 // CosmosBridgeLogNewBridgeTokenCreated represents a LogNewBridgeTokenCreated event raised by the CosmosBridge contract.
 type CosmosBridgeLogNewBridgeTokenCreated struct {
 	Decimals              uint8
-	SourcechainId         *big.Int
+	NetworkDescriptor     int32
 	Name                  string
 	Symbol                string
 	SourceContractAddress common.Address
 	BridgeTokenAddress    common.Address
+	CosmosDenom           string
 	Raw                   types.Log // Blockchain specific contextual infos
 }
 
-// FilterLogNewBridgeTokenCreated is a free log retrieval operation binding the contract event 0xa3866dbc9098b0c8ef4b4aa3dc7c0c5f86be05de8205b28bc2734ca9b530e321.
+// FilterLogNewBridgeTokenCreated is a free log retrieval operation binding the contract event 0xc6d838144c81411c2f7015ec7a5e7552549d723d48a5cdc1b349c0a7749a1ca3.
 //
-// Solidity: event LogNewBridgeTokenCreated(uint8 decimals, uint256 indexed sourcechainId, string name, string symbol, address indexed sourceContractAddress, address indexed bridgeTokenAddress)
-func (_CosmosBridge *CosmosBridgeFilterer) FilterLogNewBridgeTokenCreated(opts *bind.FilterOpts, sourcechainId []*big.Int, sourceContractAddress []common.Address, bridgeTokenAddress []common.Address) (*CosmosBridgeLogNewBridgeTokenCreatedIterator, error) {
+// Solidity: event LogNewBridgeTokenCreated(uint8 decimals, int32 indexed _networkDescriptor, string name, string symbol, address indexed sourceContractAddress, address indexed bridgeTokenAddress, string cosmosDenom)
+func (_CosmosBridge *CosmosBridgeFilterer) FilterLogNewBridgeTokenCreated(opts *bind.FilterOpts, _networkDescriptor []int32, sourceContractAddress []common.Address, bridgeTokenAddress []common.Address) (*CosmosBridgeLogNewBridgeTokenCreatedIterator, error) {
 
-	var sourcechainIdRule []interface{}
-	for _, sourcechainIdItem := range sourcechainId {
-		sourcechainIdRule = append(sourcechainIdRule, sourcechainIdItem)
+	var _networkDescriptorRule []interface{}
+	for _, _networkDescriptorItem := range _networkDescriptor {
+		_networkDescriptorRule = append(_networkDescriptorRule, _networkDescriptorItem)
 	}
 
 	var sourceContractAddressRule []interface{}
@@ -1298,21 +1172,21 @@ func (_CosmosBridge *CosmosBridgeFilterer) FilterLogNewBridgeTokenCreated(opts *
 		bridgeTokenAddressRule = append(bridgeTokenAddressRule, bridgeTokenAddressItem)
 	}
 
-	logs, sub, err := _CosmosBridge.contract.FilterLogs(opts, "LogNewBridgeTokenCreated", sourcechainIdRule, sourceContractAddressRule, bridgeTokenAddressRule)
+	logs, sub, err := _CosmosBridge.contract.FilterLogs(opts, "LogNewBridgeTokenCreated", _networkDescriptorRule, sourceContractAddressRule, bridgeTokenAddressRule)
 	if err != nil {
 		return nil, err
 	}
 	return &CosmosBridgeLogNewBridgeTokenCreatedIterator{contract: _CosmosBridge.contract, event: "LogNewBridgeTokenCreated", logs: logs, sub: sub}, nil
 }
 
-// WatchLogNewBridgeTokenCreated is a free log subscription operation binding the contract event 0xa3866dbc9098b0c8ef4b4aa3dc7c0c5f86be05de8205b28bc2734ca9b530e321.
+// WatchLogNewBridgeTokenCreated is a free log subscription operation binding the contract event 0xc6d838144c81411c2f7015ec7a5e7552549d723d48a5cdc1b349c0a7749a1ca3.
 //
-// Solidity: event LogNewBridgeTokenCreated(uint8 decimals, uint256 indexed sourcechainId, string name, string symbol, address indexed sourceContractAddress, address indexed bridgeTokenAddress)
-func (_CosmosBridge *CosmosBridgeFilterer) WatchLogNewBridgeTokenCreated(opts *bind.WatchOpts, sink chan<- *CosmosBridgeLogNewBridgeTokenCreated, sourcechainId []*big.Int, sourceContractAddress []common.Address, bridgeTokenAddress []common.Address) (event.Subscription, error) {
+// Solidity: event LogNewBridgeTokenCreated(uint8 decimals, int32 indexed _networkDescriptor, string name, string symbol, address indexed sourceContractAddress, address indexed bridgeTokenAddress, string cosmosDenom)
+func (_CosmosBridge *CosmosBridgeFilterer) WatchLogNewBridgeTokenCreated(opts *bind.WatchOpts, sink chan<- *CosmosBridgeLogNewBridgeTokenCreated, _networkDescriptor []int32, sourceContractAddress []common.Address, bridgeTokenAddress []common.Address) (event.Subscription, error) {
 
-	var sourcechainIdRule []interface{}
-	for _, sourcechainIdItem := range sourcechainId {
-		sourcechainIdRule = append(sourcechainIdRule, sourcechainIdItem)
+	var _networkDescriptorRule []interface{}
+	for _, _networkDescriptorItem := range _networkDescriptor {
+		_networkDescriptorRule = append(_networkDescriptorRule, _networkDescriptorItem)
 	}
 
 	var sourceContractAddressRule []interface{}
@@ -1324,7 +1198,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) WatchLogNewBridgeTokenCreated(opts *b
 		bridgeTokenAddressRule = append(bridgeTokenAddressRule, bridgeTokenAddressItem)
 	}
 
-	logs, sub, err := _CosmosBridge.contract.WatchLogs(opts, "LogNewBridgeTokenCreated", sourcechainIdRule, sourceContractAddressRule, bridgeTokenAddressRule)
+	logs, sub, err := _CosmosBridge.contract.WatchLogs(opts, "LogNewBridgeTokenCreated", _networkDescriptorRule, sourceContractAddressRule, bridgeTokenAddressRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1356,14 +1230,15 @@ func (_CosmosBridge *CosmosBridgeFilterer) WatchLogNewBridgeTokenCreated(opts *b
 	}), nil
 }
 
-// ParseLogNewBridgeTokenCreated is a log parse operation binding the contract event 0xa3866dbc9098b0c8ef4b4aa3dc7c0c5f86be05de8205b28bc2734ca9b530e321.
+// ParseLogNewBridgeTokenCreated is a log parse operation binding the contract event 0xc6d838144c81411c2f7015ec7a5e7552549d723d48a5cdc1b349c0a7749a1ca3.
 //
-// Solidity: event LogNewBridgeTokenCreated(uint8 decimals, uint256 indexed sourcechainId, string name, string symbol, address indexed sourceContractAddress, address indexed bridgeTokenAddress)
+// Solidity: event LogNewBridgeTokenCreated(uint8 decimals, int32 indexed _networkDescriptor, string name, string symbol, address indexed sourceContractAddress, address indexed bridgeTokenAddress, string cosmosDenom)
 func (_CosmosBridge *CosmosBridgeFilterer) ParseLogNewBridgeTokenCreated(log types.Log) (*CosmosBridgeLogNewBridgeTokenCreated, error) {
 	event := new(CosmosBridgeLogNewBridgeTokenCreated)
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogNewBridgeTokenCreated", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1498,6 +1373,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogNewOracleClaim(log types.Log)
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogNewOracleClaim", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1659,6 +1535,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogNewProphecyClaim(log types.Lo
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogNewProphecyClaim", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1793,6 +1670,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogProphecyCompleted(log types.L
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogProphecyCompleted", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -1929,6 +1807,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogProphecyProcessed(log types.L
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogProphecyProcessed", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -2066,6 +1945,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogValidatorAdded(log types.Log)
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogValidatorAdded", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -2203,6 +2083,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogValidatorPowerUpdated(log typ
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogValidatorPowerUpdated", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -2340,6 +2221,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogValidatorRemoved(log types.Lo
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogValidatorRemoved", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -2475,6 +2357,7 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogValsetReset(log types.Log) (*
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogValsetReset", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
 
@@ -2610,5 +2493,6 @@ func (_CosmosBridge *CosmosBridgeFilterer) ParseLogValsetUpdated(log types.Log) 
 	if err := _CosmosBridge.contract.UnpackLog(event, "LogValsetUpdated", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }
