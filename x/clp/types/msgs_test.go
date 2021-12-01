@@ -40,6 +40,10 @@ func GetETHAsset() Asset {
 	return NewAsset("eth")
 }
 
+func GetROWANAsset() Asset {
+	return NewAsset("rowan")
+}
+
 func GetWrongAsset() Asset {
 	return NewAsset("01234567890123456789012345678901234567890123456789012345678901234567890123456789")
 }
@@ -59,6 +63,12 @@ func TestNewMsgCreatePool(t *testing.T) {
 	assert.Equal(t, str, "clp")
 	str = newpool.Type()
 	assert.Equal(t, str, "create_pool")
+	newpool = NewMsgCreatePool(nil, asset, sdk.NewUint(1000), sdk.NewUint(100))
+	err = newpool.ValidateBasic()
+	assert.Error(t, err, "invalid address")
+	newpool = NewMsgCreatePool(signer, GetROWANAsset(), sdk.NewUint(1000), sdk.NewUint(100))
+	err = newpool.ValidateBasic()
+	assert.Error(t, err, "External Asset cannot be rowan")
 }
 
 func TestNewMsgDecommissionPool(t *testing.T) {
